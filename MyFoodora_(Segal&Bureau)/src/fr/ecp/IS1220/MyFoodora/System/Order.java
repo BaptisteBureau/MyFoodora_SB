@@ -33,9 +33,13 @@ public class Order {
 		for(Food food : Food){
 			if (food instanceof Item){
 				this.orderedItems.add((Item) food);
+				Item item = (Item) food;
+				item.incrementCounter();
 			}
 			if (food instanceof Meal){
 				this.orderedMeals.add((Meal) food);
+				Meal meal = (Meal) food;
+				meal.incrementCounter();
 			}
 		}
 		this.orderprice = 0;
@@ -71,6 +75,9 @@ public class Order {
 			if(customer.lotteryCard == system.getWinner())
 				orderprice = 0.0;
 		}
+		
+		//Add the order to the list of this restaurant's orders
+		restaurant.addShippedOrder(this);
 	}
 	
 	

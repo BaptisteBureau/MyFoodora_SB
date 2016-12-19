@@ -17,6 +17,7 @@ public class Customer extends User{
 	private FidelityCard card = FidelityCard.BasicCard;
 	public PointFidelityCard pointCard = new PointFidelityCard();
 	public LotteryFidelityCard lotteryCard = null;
+	private MyFoodoraSystem system = MyFoodoraSystem.getInstance();
 	
 
 	public Customer(String name, String surname, double[] adress, String email, long phone, String username) {
@@ -44,7 +45,6 @@ public class Customer extends User{
 		 * from the system
 		 */
 		if(this.card == FidelityCard.LotteryCard){
-			MyFoodoraSystem system = MyFoodoraSystem.getInstance();
 			ArrayList<LotteryFidelityCard> old = system.getActivedLotteryCards();
 			old.remove(this.card);
 			system.setActivedLotteryCards(old);

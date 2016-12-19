@@ -6,6 +6,7 @@ public abstract class Meal extends Food{
 	private MealType mealtype;
 	private double mealItemsPrice;
 	private Item[] mealItems;
+	private int counter;
 	
 
 	public Meal(Restaurant restaurant, MealType mealtype, Item[] mealItems) {
@@ -39,6 +40,14 @@ public abstract class Meal extends Food{
 			return (this.mealItemsPrice*(1-this.getRestaurant().getSpecific_discount_factor()));
 		}
 		return this.mealItemsPrice*(1-this.getRestaurant().getGeneric_discount_factor());
+	}
+	
+	public int getCounter() {
+		return counter;
+	}
+
+	public void incrementCounter(){
+		this.counter+=1;
 	}
 
 }

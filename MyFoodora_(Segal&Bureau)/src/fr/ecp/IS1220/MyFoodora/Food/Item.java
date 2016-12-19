@@ -8,6 +8,7 @@ public abstract class Item extends Food{
 	private ItemType itemtype;
 	private RegimeType regimetype;
 	private boolean gluten_free;
+	private int counter;
 	
 
 	public Item(Restaurant restaurant, String itemname, ItemType itemtype, double itemprice, RegimeType regimetype, boolean gluten_free) {
@@ -87,9 +88,18 @@ public abstract class Item extends Food{
 		this.gluten_free = gluten_free;
 	}
 
+	public int getCounter() {
+		return counter;
+	}
+
 	@Override
 	public String toString() {
 		return "Item [itemname=" + itemname + ", itemtype=" + itemtype + "]";
+	}
+	
+	
+	public void incrementCounter(){
+		this.counter+=1;
 	}
 	
 

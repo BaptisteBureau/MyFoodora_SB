@@ -3,6 +3,7 @@ package fr.ecp.IS1220.MyFoodora.Users;
 import java.util.ArrayList;
 import fr.ecp.IS1220.MyFoodora.Exceptions.*;
 import fr.ecp.IS1220.MyFoodora.Food.*;
+import fr.ecp.IS1220.MyFoodora.Policies.ShippedOrder;
 import fr.ecp.IS1220.MyFoodora.System.*;
  
 public class Restaurant extends User{
@@ -14,6 +15,7 @@ public class Restaurant extends User{
        private double generic_discount_factor;
        private double specific_discount_factor;
        private ArrayList<Order> shippedOrder;
+       private MyFoodoraSystem system = MyFoodoraSystem.getInstance();
       
  
        public Restaurant(String name, Point adress, String username) {
@@ -164,6 +166,47 @@ public class Restaurant extends User{
       
        //Sorting of shipped orders
        public void sortShippedOrder(){
-            
+    	   ShippedOrder policy = system.getShippolicy();
+    	   if(policy == ShippedOrder.MostLeastOrderedHalfMeal){
+    		   ArrayList<Meal> meals = this.getListOfMeals();
+    		   Meal max = null;
+    		   
+    		   /*
+    		    * We duplicate the list of shipped orders to empty it in printing each time the most ordered half meal, then
+    		    * removing it from the list
+    		    */
+    		   
+    		   while(!meals.isEmpty()){
+    		   	   max = meals.get(0);
+	    		   for(Meal m : meals){
+	    			   if(m.getMealtype() != MealType.Half_meal){
+	    				   meals.remove(m);
+	    			   }
+	    			   else if(m.getCounter() > max.getCounter()){
+	    				   max = m;
+	    			   }
+	    		   }
+	    		   System.out.println(max.toString());
+	    		   meals.remove(max);
+    		   }
+    	   }
+    	   
+		   //Same thing than above with items
+		   
+    	   else{
+    		   ArrayList<Item> items = this.getMenu();
+    		   Item max = null;
+    		   
+    		   while(!items.isEmpty()){
+    			   max = items.get(0);
+    			   for(Item i : items){
+    				   if(i.getCounter() > max.getCounter()){
+    					   max = i;
+    				   }
+    			   }
+    			   System.out.println(max.toString());
+    			   items.remove(max);
+    		   }
+    	   }
        }
 }
