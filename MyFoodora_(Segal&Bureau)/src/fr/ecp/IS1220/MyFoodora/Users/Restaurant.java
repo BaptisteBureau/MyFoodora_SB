@@ -327,6 +327,7 @@ public class Restaurant extends User{
 	    	   }
 	    	   
     	   }
+    	   sc.close();
        }
        
        
@@ -508,6 +509,7 @@ public class Restaurant extends User{
 	    		   mealType = MealType.Full_meal;
 	    	   else
 	    		   throw new MealNotValid();
+	    	   
 	   		
 	    	   //The regime type is set on vegetarian if all the items from the meal are vegetarian.
 	    	   //Same thing for gluten-free option.
@@ -535,6 +537,7 @@ public class Restaurant extends User{
 	    		   System.out.println("This meal hasn't been added to your menu");
 	    	   }
     	   }
+    	   sc.close();
        }
        
        
