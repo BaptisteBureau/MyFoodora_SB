@@ -17,8 +17,8 @@ public class Courier extends User{
 	
 
 	public Courier(String name, String surname, long phone, ArrayList<Order> deliveries,
-			String username) {
-		super(name);
+			String username, double hashedPassword) {
+		super(name, username, hashedPassword);
 		this.surname = surname;
 		this.phone = phone;
 		this.deliveries = new ArrayList<Order>();

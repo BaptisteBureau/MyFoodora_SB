@@ -3,58 +3,45 @@ package fr.ecp.IS1220.MyFoodora.Food;
 import fr.ecp.IS1220.MyFoodora.Users.Restaurant;
 
 public abstract class Item extends Food{
-	private String itemname;
 	private double itemprice;
 	private ItemType itemtype;
 	private RegimeType regimetype;
 	private boolean gluten_free;
-	private int counter;
+	private int counter = 0;
 	
 
-	public Item(Restaurant restaurant, String itemname, ItemType itemtype, double itemprice, RegimeType regimetype, boolean gluten_free) {
-		super(restaurant);
-		this.itemname = itemname;
+	public Item(Restaurant restaurant, String name, ItemType itemtype, double itemprice, RegimeType regimetype, boolean gluten_free) {
+		super(restaurant, name);
 		this.itemtype = itemtype;
 		this.regimetype = regimetype;
 		this.gluten_free = gluten_free;
 		this.itemprice = itemprice;
 	}
 	
-	public Item(Restaurant restaurant, String itemname, ItemType itemtype, double itemprice, RegimeType regimetype) {
-		super(restaurant);
-		this.itemname = itemname;
+	public Item(Restaurant restaurant, String name, ItemType itemtype, double itemprice, RegimeType regimetype) {
+		super(restaurant, name);
 		this.itemtype = itemtype;
 		this.itemprice = itemprice;
 		this.regimetype = regimetype;
 		this.gluten_free = false;
 	}
 	
-	public Item(Restaurant restaurant, String itemname, ItemType itemtype, double itemprice, boolean gluten_free) {
-		super(restaurant);
-		this.itemname = itemname;
+	public Item(Restaurant restaurant, String name, ItemType itemtype, double itemprice, boolean gluten_free) {
+		super(restaurant, name);
 		this.itemtype = itemtype;
 		this.itemprice = itemprice;
 		this.regimetype = RegimeType.Standard;
 		this.gluten_free = gluten_free;
 	}
 	
-	public Item(Restaurant restaurant, String itemname, ItemType itemtype, double itemprice) {
-		super(restaurant);
-		this.itemname = itemname;
+	public Item(Restaurant restaurant, String name, ItemType itemtype, double itemprice) {
+		super(restaurant,name);
 		this.itemtype = itemtype;
 		this.itemprice = itemprice;
 		this.regimetype = RegimeType.Standard;
 		this.gluten_free = false;
 	}
 
-
-	public String getItemname() {
-		return itemname;
-	}
-
-	public void setItemname(String itemname) {
-		this.itemname = itemname;
-	}
 
 	public double getItemprice() {
 		return itemprice;
@@ -94,12 +81,14 @@ public abstract class Item extends Food{
 
 	@Override
 	public String toString() {
-		return "Item [itemname=" + itemname + ", itemtype=" + itemtype + "]";
+		return "Item [itemname=" + this.getName() + ", itemtype=" + itemtype + "]";
 	}
 	
 	
+
 	public void incrementCounter(){
 		this.counter+=1;
+		this.getRestaurant().incrementCounter();
 	}
 	
 

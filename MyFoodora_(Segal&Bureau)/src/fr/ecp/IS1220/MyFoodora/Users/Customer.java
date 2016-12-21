@@ -20,8 +20,8 @@ public class Customer extends User{
 	private MyFoodoraSystem system = MyFoodoraSystem.getInstance();
 	
 
-	public Customer(String name, String surname, double[] adress, String email, long phone, String username) {
-		super(name);
+	public Customer(String name, String surname, double[] adress, String email, long phone, String username, double hashedPassword) {
+		super(name, username, hashedPassword);
 		this.surname = surname;
 		this.adress = adress;
 		this.email = email;

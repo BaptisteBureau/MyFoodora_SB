@@ -1,7 +1,8 @@
 package fr.ecp.IS1220.MyFoodora.System;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import fr.ecp.IS1220.MyFoodora.Food.*;
 import fr.ecp.IS1220.MyFoodora.Policies.FidelityCard;
@@ -15,7 +16,7 @@ public class Order {
 	private Customer customer;
 	private Restaurant restaurant;
 	private double orderprice;
-	private Date orderdate;
+	private Calendar orderdate;
 	private Courier courier;
 	
 	//Profit-related information at the time of the order
@@ -49,7 +50,7 @@ public class Order {
 		for (Meal meal : orderedMeals){
 			this.orderprice += meal.getMealprice();
 		}
-		this.orderdate = new Date();
+		this.orderdate = GregorianCalendar.getInstance();
 		this.restaurant = Food.get(0).getRestaurant();
 		this.serviceFee = MyFoodoraSystem.getInstance().getServiceFee();
 		this.markupPercentage = MyFoodoraSystem.getInstance().getMarkupPercentage();
@@ -89,7 +90,7 @@ public class Order {
 		return restaurant;
 	}
 
-	public Date getOrderdate() {
+	public Calendar getOrderdate() {
 		return orderdate;
 	}
 

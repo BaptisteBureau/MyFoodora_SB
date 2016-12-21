@@ -1,6 +1,8 @@
 package fr.ecp.IS1220.MyFoodora.System;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 import fr.ecp.IS1220.MyFoodora.Food.*;
@@ -8,6 +10,8 @@ import fr.ecp.IS1220.MyFoodora.Policies.*;
 import fr.ecp.IS1220.MyFoodora.Users.*;
 
 public class MyFoodoraSystem {
+	private Calendar startingDate;
+	
 	//Array Lists of all registered users
 	private ArrayList<Manager> registeredManagers = new ArrayList<Manager>();
 	private ArrayList<Restaurant> registeredRestaurants = new ArrayList<Restaurant>();
@@ -32,7 +36,9 @@ public class MyFoodoraSystem {
 	private ShippedOrder shippolicy;
 	private TargetProfit targetprofit;
 	
-	private MyFoodoraSystem(){chooseWinner();}
+	private MyFoodoraSystem(){
+		this.startingDate = GregorianCalendar.getInstance();
+	}
 	
 	private static MyFoodoraSystem uniqueInstance = new MyFoodoraSystem();
 	
@@ -41,6 +47,10 @@ public class MyFoodoraSystem {
 	}
 	
 	//All Getters and Setters
+	public Calendar getStartingDate() {
+		return startingDate;
+	}
+	
 	public ArrayList<Manager> getRegisteredManagers() {
 		return registeredManagers;
 	}
