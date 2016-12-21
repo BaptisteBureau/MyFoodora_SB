@@ -17,30 +17,6 @@ public abstract class Item extends Food{
 		this.gluten_free = gluten_free;
 		this.itemprice = itemprice;
 	}
-	
-	public Item(Restaurant restaurant, String name, ItemType itemtype, double itemprice, RegimeType regimetype) {
-		super(restaurant, name);
-		this.itemtype = itemtype;
-		this.itemprice = itemprice;
-		this.regimetype = regimetype;
-		this.gluten_free = false;
-	}
-	
-	public Item(Restaurant restaurant, String name, ItemType itemtype, double itemprice, boolean gluten_free) {
-		super(restaurant, name);
-		this.itemtype = itemtype;
-		this.itemprice = itemprice;
-		this.regimetype = RegimeType.Standard;
-		this.gluten_free = gluten_free;
-	}
-	
-	public Item(Restaurant restaurant, String name, ItemType itemtype, double itemprice) {
-		super(restaurant,name);
-		this.itemtype = itemtype;
-		this.itemprice = itemprice;
-		this.regimetype = RegimeType.Standard;
-		this.gluten_free = false;
-	}
 
 
 	public double getItemprice() {

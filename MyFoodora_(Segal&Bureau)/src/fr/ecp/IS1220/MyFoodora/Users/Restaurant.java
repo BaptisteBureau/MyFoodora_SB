@@ -8,8 +8,10 @@ import fr.ecp.IS1220.MyFoodora.System.*;
  
 public class Restaurant extends User{
        private Point adress;
+       private ArrayList<Item> listOfItems;
        private ArrayList<Item> menu;
        private ArrayList<Meal> listOfMeals;
+       private ArrayList<Meal> mealsInMenu;
        private ArrayList<Meal> mealsOfTheWeek;
        private double generic_discount_factor;
        private double specific_discount_factor;
@@ -21,8 +23,10 @@ public class Restaurant extends User{
        public Restaurant(String name, Point adress, String username, double hashedPassword) {
              super(name, username, hashedPassword);
              this.adress = adress;
+             this.listOfItems = new ArrayList<Item>();
              this.menu = new ArrayList<Item>();
              this.listOfMeals = new ArrayList<Meal>();
+             this.mealsInMenu = new ArrayList<Meal>();
              this.mealsOfTheWeek = new ArrayList<Meal>();
              this.shippedOrder = new ArrayList<Order>();
        }
@@ -32,8 +36,10 @@ public class Restaurant extends User{
                     double generic_discount_factor, double specific_discount_factor) {
              super(name, username, hashedPassword);
              this.adress = adress;
+             this.listOfItems = new ArrayList<Item>();
              this.menu = new ArrayList<Item>();
              this.listOfMeals = new ArrayList<Meal>();
+             this.mealsInMenu = new ArrayList<Meal>();
              this.generic_discount_factor = generic_discount_factor;
              this.specific_discount_factor = specific_discount_factor;
              this.mealsOfTheWeek = new ArrayList<Meal>();
@@ -49,8 +55,15 @@ public class Restaurant extends User{
        public void setAdress(Point adress) {
              this.adress = adress;
        }
- 
-      
+        
+       public ArrayList<Item> getListOfItems() {
+    	   return listOfItems;
+       }
+
+       public void setListOfItems(ArrayList<Item> listOfItems) {
+    	   this.listOfItems = listOfItems;
+       }
+
        public ArrayList<Item> getMenu() {
              return menu;
        }
@@ -67,6 +80,14 @@ public class Restaurant extends User{
              this.listOfMeals = listOfMeals;
        }
  
+       public ArrayList<Meal> getMealsInMenu() {
+    	   return mealsInMenu;
+       }
+
+       public void setMealsInMenu(ArrayList<Meal> mealsInMenu) {
+    	   this.mealsInMenu = mealsInMenu;
+       }
+
        public ArrayList<Meal> getMealsOfTheWeek() {
              return mealsOfTheWeek;
        }
@@ -103,15 +124,13 @@ public class Restaurant extends User{
 
 
        public void addShippedOrder(Order order){
-    	   ArrayList<Order> newlist = this.getShippedOrder();
-    	   newlist.add(order);
-    	   this.setShippedOrder(newlist);
+    	   this.shippedOrder.add(order);
        }
        
        
        //Return starters of the restaurant in the menu
        public ArrayList<Item> getStarters() {
-    	   ArrayList<Item> starters = this.getMenu();
+    	   ArrayList<Item> starters = this.listOfItems;
     	   for (Item item : starters){
     		   if(!item.getItemtype().equals(ItemType.Starter))
     			   starters.remove(item);
@@ -121,7 +140,7 @@ public class Restaurant extends User{
 
        //Return main dishes of the restaurant in the menu
        public ArrayList<Item> getMainDishes() {
-    	   ArrayList<Item> mainDishes = this.getMenu();
+    	   ArrayList<Item> mainDishes = this.listOfItems;
     	   for (Item item : mainDishes){
     		   if(!item.getItemtype().equals(ItemType.Main_dish))
     			   mainDishes.remove(item);
@@ -131,7 +150,7 @@ public class Restaurant extends User{
 
        //Return desserts of the restaurant in the menu
        public ArrayList<Item> getDesserts() {
-    	   ArrayList<Item> desserts = this.getMenu();
+    	   ArrayList<Item> desserts = this.listOfItems;
     	   for (Item item : desserts){
     		   if(!item.getItemtype().equals(ItemType.Dessert))
     			   desserts.remove(item);
@@ -149,15 +168,32 @@ public class Restaurant extends User{
        }
        
 
+       //Create item
+       public void createItem(){
+    	   //choose a name for the item
+    	   
+    	   //choose type for the item
+    	   
+    	   //set the price of the item
+    	   
+    	   //is it vegetarian?
+    	   
+    	   //is it gluten free?
+    	   
+    	   Item item = new Item();
+    	   this.listOfItems.add(item);
+    	   
+    	   //do you want to add it to your menu?
+    	   this.menu.add(item);
+       }
+       
        
        //Add item to the menu
        public void addItemToMenu(Item item) throws ItemAlreadyInMenuException{
              if(this.getMenu().contains(item))
             	 throw new ItemAlreadyInMenuException();
              else {
-            	 ArrayList<Item> newMenu = this.getMenu();
-            	 newMenu.add(item);
-            	 this.setMenu(newMenu);
+            	 this.menu.add(item);
              }
        }
       
@@ -165,24 +201,65 @@ public class Restaurant extends User{
        //Remove item from the menu
        //Problem if the Item is not in the Menu, exception thrown
        public void removeItemFromMenu(Item item) throws ItemNotInMenuException{
-             ArrayList<Item> newMenu = this.getMenu();
-             if(!newMenu.contains(item))
+             if(!this.menu.contains(item))
             	 throw new ItemNotInMenuException();
              else {
-            	 newMenu.remove(item);
-            	 this.setMenu(newMenu);
+            	 this.menu.remove(item);
              }
        }
-      
-      
+
+       
+       //Create menu
+       public void createMeal() throws MealNotValid {
+    	   Item starter = null;
+    	   Item mainDish = null;
+    	   Item dessert = null;
+    	   Item[] mealItems = {starter, mainDish, dessert};
+    	   String name = null;
+    	   
+    	   //choose a name for this meal 
+    	   
+    	   //choose a starter between yours (or no starter)
+    	   
+    	   //choose a main dish between yours
+    	   
+    	   //choose a dessert between yours (or no starter)
+    	   
+    	   MealType mealType;
+    	   if(starter == null && dessert != null && mainDish != null)
+    		   mealType = MealType.MainDish_and_Dessert;
+    	   else if(starter != null && dessert == null && mainDish != null)
+    		   mealType = MealType.Starter_and_MainDish;
+    	   else if(starter != null && dessert != null && mainDish != null)
+    		   mealType = MealType.Full_meal;
+    	   else
+    		   throw new MealNotValid();
+   		
+    	   RegimeType regimeType = RegimeType.Standard;
+    	   if (starter.getRegimetype() == RegimeType.Vegetarian 
+    			   && mainDish.getRegimetype() == RegimeType.Vegetarian 
+    			   && dessert.getRegimetype() == RegimeType.Vegetarian){
+    		   regimeType = RegimeType.Vegetarian;
+    	   }
+    	   
+    	   boolean glutenFree = false;
+    	   if (starter.isGluten_free() && mainDish.isGluten_free() && dessert.isGluten_free()){
+    		   glutenFree = true;
+    	   }
+    	   Meal meal = new Meal(this, name, mealType, mealItems, regimeType, glutenFree);
+    	   this.listOfMeals.add(meal);
+    	   
+    	   //do you want to add it to your menu?
+    	   this.mealsInMenu.add(meal);
+       }
+       
+       
        //Add meal to the menu
        public void addMealToMenu(Meal meal) throws MealAlreadyInMenuException{
-             ArrayList<Meal> newListOfMeals = this.getListOfMeals();
-             if (newListOfMeals.contains(meal))
+             if (this.mealsInMenu.contains(meal))
             	 throw new MealAlreadyInMenuException();
              else {
-                 newListOfMeals.add(meal);
-                 this.setListOfMeals(newListOfMeals);          	 
+                 this.mealsInMenu.add(meal);         	 
              }
 
        }
@@ -191,38 +268,32 @@ public class Restaurant extends User{
        //Remove a meal from the menu
        //Problem if the meal is not in the menu, exception thrown
        public void removeMealFromMenu(Meal meal) throws MealNotInMenuException{
-             ArrayList<Meal> newListOfMeals = this.getListOfMeals();
-             if(!newListOfMeals.contains(meal))
+             if(!this.mealsOfTheWeek.contains(meal))
             	 throw new MealNotInMenuException();
              else {
-            	 newListOfMeals.remove(meal);
-            	 this.setListOfMeals(newListOfMeals);
+            	 this.mealsOfTheWeek.remove(meal);
              }
        }
        
        //Add meal to the meals of the Week list
        public void addMealToMealsOfTheWeek(Meal meal) throws MealNotInMenuException, MealAlreadyMealOfTheWeekException {
-           if(!this.getListOfMeals().contains(meal))
+           if(!this.mealsInMenu.contains(meal))
         	   throw new MealNotInMenuException();
-           else if (this.getMealsOfTheWeek().contains(meal))
+           else if (this.mealsOfTheWeek.contains(meal))
         	   throw new MealAlreadyMealOfTheWeekException();
            else {
-        	   ArrayList<Meal> newMealsOfTheWeek = this.getMealsOfTheWeek();
-        	   newMealsOfTheWeek.add(meal);
-        	   this.setMealsOfTheWeek(newMealsOfTheWeek);
+        	   this.mealsOfTheWeek.add(meal);
            }
        }
        
        //Remove a meal from the meals of the week list
        public void removeMealFromMealsOfTheWeek(Meal meal) throws MealNotInMenuException, MealNotMealOfTheWeekException {
-    	   if(!this.getListOfMeals().contains(meal))
+    	   if(!this.mealsInMenu.contains(meal))
         	   throw new MealNotInMenuException();
-    	   else if (!this.getMealsOfTheWeek().contains(meal))
+    	   else if (!this.mealsOfTheWeek.contains(meal))
         	   throw new MealNotMealOfTheWeekException();
     	   else {
-        	   ArrayList<Meal> newMealsOfTheWeek = this.getMealsOfTheWeek();
-        	   newMealsOfTheWeek.remove(meal);
-        	   this.setMealsOfTheWeek(newMealsOfTheWeek);
+        	   this.mealsOfTheWeek.remove(meal);
            }
        }
 

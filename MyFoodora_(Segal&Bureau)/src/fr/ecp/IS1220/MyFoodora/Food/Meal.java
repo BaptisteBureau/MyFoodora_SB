@@ -9,9 +9,11 @@ public class Meal extends Food{
 	private double mealItemsPrice;
 	private Item[] mealItems;
 	private int counter;
+	private RegimeType regimeType;
+	private boolean glutenFree;
 	
 
-	public Meal(Restaurant restaurant, String name, MealType mealtype, Item[] mealItems) {
+	public Meal(Restaurant restaurant, String name, MealType mealtype, Item[] mealItems, RegimeType regimeType, boolean glutenFree) {
 		super(restaurant, name);
 		this.mealtype = mealtype;
 		this.mealItems = mealItems;
@@ -19,6 +21,8 @@ public class Meal extends Food{
 		for (Item item : mealItems){
 			this.mealItemsPrice += item.getItemprice();
 		}
+		this.regimeType = regimeType;
+		this.glutenFree = glutenFree;
 	}
 
 	public Item[] getMealItems() {
@@ -37,6 +41,15 @@ public class Meal extends Food{
 		this.mealtype = mealtype;
 	}
 
+	
+	public RegimeType getRegimeType() {
+		return regimeType;
+	}
+
+	public boolean isGlutenFree() {
+		return glutenFree;
+	}
+
 	public double getMealprice() {
 		if (this.getRestaurant().getMealsOfTheWeek().contains(this)){
 			return (this.mealItemsPrice*(1-this.getRestaurant().getSpecific_discount_factor()));
@@ -52,6 +65,7 @@ public class Meal extends Food{
 		this.counter+=1;
 		this.getRestaurant().incrementCounter();
 	}
+	
 
 	@Override
 	public int hashCode() {
