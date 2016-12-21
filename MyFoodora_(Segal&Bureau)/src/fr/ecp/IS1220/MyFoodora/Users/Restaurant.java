@@ -176,14 +176,17 @@ public class Restaurant extends User{
     	   Scanner sc = new Scanner(System.in);
     	   ItemType type = null;
     	   double price = 0.0;
-    	   boolean glutenFree = false;
     	   String answer = "";
+    	   
+    	   //Regime type and gluten free value are both set on standard by default.
     	   RegimeType regimeType = RegimeType.Standard;
+    	   boolean glutenFree = false;
     	   
     	   //choose type for the item
-    	   System.out.println("Is this item 1 - a starter, 2 - a main dish, or 3 - a dessert ? Choose 1, 2 or 3.");
     	   //We get the user to enter the type of the item while he can't get the right type and wants to start over.
+    	   
     	   while(type == null){
+        	   System.out.println("Is this item 1 - a starter, 2 - a main dish, or 3 - a dessert ? Choose 1, 2 or 3.");
     		   try{
 	    		   int t = sc.nextInt();
 	    		   if(t==1)
@@ -193,6 +196,10 @@ public class Restaurant extends User{
 	    		   else if(t==3)
 	    			   type = ItemType.Dessert;
 	    		   else{
+	    			   
+	    			   //Here, the user entered an integer but not between 1 and 3.
+	    			   //We ask him if he wants to retry. If not, we get out of the loop and the method ends.
+	    			   
 	    			   System.out.println("The type you're trying to select is not valid. You should choose a number between 1 and 3.");
 	    			   System.out.println("Do you like to try again ? Yes / No");
 	    			   sc.nextLine();
@@ -200,7 +207,12 @@ public class Restaurant extends User{
 	    			   if(answer.toLowerCase().charAt(0) != 'y')
 	        			   break;
 	    		   }
+	    		   
 	    	   } catch(InputMismatchException e){
+	    		   
+	    		   //Here, the user didn't enter an integer.
+	    		   //We ask him if he wants to retry. If not, we get out of the loop and the method ends.
+	    		   
 	    		   System.out.println("You're trying to enter a wrong type. You're supposed to choose a number between 1 and 3.");
 	    		   System.out.println("Do you like to try again ? Yes / No");
 	    		   sc.nextLine();
@@ -209,60 +221,108 @@ public class Restaurant extends User{
 	    			   break;
 	    	   }
     	   }
+    	   
+    	   
     	   //If we get there while type is still null, means the user failed to select a type and does not want to start over.
+    	   //In this case, the method ends.
+    	   
     	   if(type != null){
-	    	   sc.nextLine();
-	    	   //choose a name for the item. Here, we suppose there can't be any mistake in the name.
-	    	   System.out.println("What's the name of this new item ?");
-	    	   String name = sc.nextLine();
-	    
-	    	   //set the price of the item
-	    	   System.out.println("At what price should this item be sold ?");
-	    	   while(price <= 0){
-	    		   try{
-	    			   price = sc.nextDouble();
-		    	   } catch(InputMismatchException e){
-		    		   System.out.println("You're supposed to enter a positive number for the price.");
-		    		   System.out.println("Do you like to try again ? Yes / No");
-	    			   sc.nextLine();
-	    			   answer = sc.nextLine();
-	    			   if(answer.toLowerCase().charAt(0) != 'y')
-	        			   break;
-		    	   }
-		    	   if(price <= 0.0){
-		    		   System.out.println("You're supposed to enter a positive number for the price.");
-		    		   System.out.println("Do you like to try again ? Yes / No");
-	    			   sc.nextLine();
-	    			   answer = sc.nextLine();
-	    			   if(answer.toLowerCase().charAt(0) != 'y')
-	        			   break;
-		    	   }
+	    	   sc.nextLine(); //Empties the scanner
+	    	   
+	    	   //Choose a name for the item. It shouldn't be already attributed to an other existing item.
+	    	   
+	    	   String name = "";
+	    	   while(name == ""){
+		    	   System.out.println("What's the name of this new item ?");
+	    		   name = sc.nextLine();
+	    		   
+	    		   //We check if the name already exists.
+	    		   
+	    		   for(Item i : listOfItems){
+	    			   if(i.getName() == name){
+	    				   System.out.println("The item named " + name + " already exists.");
+	    				   name = "";
+	    			   }
+	    		   }
+	    		   
+	    		   //If it does, we ask the user if he wants to try again.
+	    		   
+	    		   if(name == ""){
+    				   System.out.println("Do you like to try again ? Yes / No");
+    	    		   sc.nextLine();
+    	    		   answer = sc.nextLine();
+    	    		   if(answer.toLowerCase().charAt(0) != 'y')
+    	    			   break;
+    			   }
 	    	   }
-	    	   //if we get there and the price is still nod valid, means the user wants to cancel the creation of this item.
-	    	   if(price > 0.0){
-	    		   //is it vegetarian?
-		    	   System.out.println("Is this item vegetarian ? Yes / No");
-		    	   sc.nextLine();
-		    	   answer = sc.nextLine();
-		    	   if(answer.toLowerCase().charAt(0) != 'y')
-		    		   regimeType = RegimeType.Vegetarian;
-		    	   //is it gluten free?
-		    	   System.out.println("Is this item gluten-free ? Yes / No");
-		    	   answer = sc.nextLine();
-		    	   if(answer.toLowerCase().charAt(0) != 'y')
-		    		   glutenFree = true;
-		    	   Item item = new Item(this, name, type, price, regimeType, glutenFree);
-		    	   this.listOfItems.add(item);
-		    	   
-		    	   //do you want to add this item to your menu?
-		    	   System.out.println("Do you want to add this item to the menu ? \n" + item.toString());
-		    	   answer = sc.nextLine();
-		    	   if(answer.toLowerCase().charAt(0) != 'y'){
-		    		   this.menu.add(item); 
-		    		   System.out.println("This item has been added to your menu.");
+	    	   
+	    	   //If we reach this state without name, means the user wants to cancel the creation of the item.
+	    	   //In this case, the method ends.
+	    	   
+	    	   if(name != ""){
+	    		   
+		    	   //set the price of the item
+	    		   //Here, two errors can appear : the user didn't type a double or the price is null or negative.
+	    		   //Same principle than before.
+	    		   
+		    	   while(price <= 0.0){
+			    	   System.out.println("At what price should this item be sold ?");
+		    		   try{
+		    			   price = sc.nextDouble();
+			    	   } catch(InputMismatchException e){
+			    		   System.out.println("You're supposed to enter a positive double number for the price.");
+			    		   System.out.println("Do you like to try again ? Yes / No");
+		    			   sc.nextLine(); //Empties the scanner
+		    			   answer = sc.nextLine();
+		    			   if(answer.toLowerCase().charAt(0) != 'y')
+		        			   break;
+			    	   }
+		    		   
+			    	   if(price <= 0.0){
+			    		   System.out.println("You're supposed to enter a positive double number for the price.");
+			    		   System.out.println("Do you like to try again ? Yes / No");
+		    			   sc.nextLine(); //Empties the scanner
+		    			   answer = sc.nextLine();
+		    			   if(answer.toLowerCase().charAt(0) != 'y')
+		        			   break;
+			    	   }
 		    	   }
-		    	   else{
-		    		   System.out.println("This item hasn't been added to your menu");
+		    	   
+		    	   //if we get there and the price is still nod valid, means the user wants to cancel the creation of this item.
+		    	   //In this case, the method ends.
+		    	   
+		    	   if(price > 0.0){
+
+			    	   System.out.println("Is this item vegetarian ? Yes / No");
+			    	   sc.nextLine(); //Empties the scanner
+			    	   answer = sc.nextLine();
+			    	   if(answer.toLowerCase().charAt(0) != 'y'){
+			    		   regimeType = RegimeType.Vegetarian;
+			    		   System.out.println("The regime type of this item has been set on vegetarian.");
+			    	   }
+			    	   
+			    	   System.out.println("Is this item gluten-free ? Yes / No");
+			    	   answer = sc.nextLine();
+			    	   if(answer.toLowerCase().charAt(0) != 'y'){
+			    		   glutenFree = true;
+			    		   System.out.println("This item is defined as gluten-free.");
+			    	   }
+			    	   
+			    	   //Creation of the item
+			    	   Item item = new Item(this, name, type, price, regimeType, glutenFree);
+			    	   this.listOfItems.add(item);
+			    	   
+			    	   //We check if the user wants to add this item to his menu, with description of the item created.
+			    	   
+			    	   System.out.println("Do you want to add this item to the menu ? \n" + item.toString());
+			    	   answer = sc.nextLine();
+			    	   if(answer.toLowerCase().charAt(0) != 'y'){
+			    		   this.menu.add(item); 
+			    		   System.out.println("This item has been added to your menu.");
+			    	   }
+			    	   else{
+			    		   System.out.println("This item hasn't been added to your menu");
+			    	   }
 		    	   }
 	    	   }
 	    	   
@@ -297,42 +357,184 @@ public class Restaurant extends User{
     	   Item mainDish = null;
     	   Item dessert = null;
     	   Item[] mealItems = {starter, mainDish, dessert};
-    	   String name = null;
-    	   
-    	   //choose a name for this meal 
-    	   
-    	   //choose a starter between yours (or no starter)
-    	   
-    	   //choose a main dish between yours
-    	   
-    	   //choose a dessert between yours (or no starter)
-    	   
-    	   MealType mealType;
-    	   if(starter == null && dessert != null && mainDish != null)
-    		   mealType = MealType.MainDish_and_Dessert;
-    	   else if(starter != null && dessert == null && mainDish != null)
-    		   mealType = MealType.Starter_and_MainDish;
-    	   else if(starter != null && dessert != null && mainDish != null)
-    		   mealType = MealType.Full_meal;
-    	   else
-    		   throw new MealNotValid();
-   		
-    	   RegimeType regimeType = RegimeType.Standard;
-    	   if (starter.getRegimetype() == RegimeType.Vegetarian 
-    			   && mainDish.getRegimetype() == RegimeType.Vegetarian 
-    			   && dessert.getRegimetype() == RegimeType.Vegetarian){
-    		   regimeType = RegimeType.Vegetarian;
-    	   }
-    	   
+    	   String name = "";
+    	   String answer = "";
+    	   Scanner sc = new Scanner(System.in);
+    	   RegimeType regimeType = RegimeType.Vegetarian;
     	   boolean glutenFree = false;
-    	   if (starter.isGluten_free() && mainDish.isGluten_free() && dessert.isGluten_free()){
-    		   glutenFree = true;
-    	   }
-    	   Meal meal = new Meal(this, name, mealType, mealItems, regimeType, glutenFree);
-    	   this.listOfMeals.add(meal);
     	   
-    	   //do you want to add it to your menu?
-    	   this.mealsInMenu.add(meal);
+    	   //Choose a name for this meal. It shouldn't be already attributed to an other existing meal.
+    	   
+    	   while(name == ""){
+        	   System.out.println("What's the name of the meal ?");
+    		   name = sc.nextLine();
+    		   for(Meal m : listOfMeals){
+    			   if(m.getName() == name){
+    				   System.out.println("The meal named " + name + " already exists.");
+    				   name = "";
+    				   break; //Breaks from the for loop only.
+    			   }
+    		   }
+    		   
+    		   if(name == ""){
+				   System.out.println("Do you like to try again ? Yes / No");
+	    		   sc.nextLine();
+	    		   answer = sc.nextLine();
+	    		   if(answer.toLowerCase().charAt(0) != 'y')
+	    			   break;
+			   }
+    	   }
+    	   
+    	   //If we reach this state without name, means the user wants to cancel the creation of this meal.
+    	   //In this case, the method ends.
+    	   
+    	   if(name == ""){
+    		   
+	    	   //The user has to choose whether the meal contains a starter or not.
+    		   
+	    	   System.out.println("Does this meal contain a starter ? Yes / No");
+	    	   answer = sc.nextLine();
+	    	   if(answer.toLowerCase().charAt(0) != 'y'){ //Check if the answer is similar to yes (avoids misunderstanding)
+	    		   
+	    		   //Now, the user has to choose his starter from his starters list.
+	    		   //We create this startersName Array List to link names of items with items themselves.
+	    		   //If the item is not a starter, his name is set to "".
+	    		   //Allows to have a connection between the index of the starters name in startersName and its index in listOfItems
+	    		   
+	    		   ArrayList<String> startersName = new ArrayList<String>();
+	    		   System.out.println("Choose between your list of starters :");
+	    		   for(Item i : listOfItems){
+	    			   if(i.getItemtype() == ItemType.Starter){
+	        			   System.out.println(i.getName());
+	        			   startersName.add(i.getName().toLowerCase());
+	    			   }
+	    			   else{
+	    				   startersName.add("");
+	    			   }
+	    		   }
+	    		   
+	    		   //We check if the user enters an starter name that is in his item's list (without consideration for case).
+	    		   
+	    		   while(starter == null){
+	    			   answer = sc.nextLine().toLowerCase();
+	    			   if(startersName.contains(answer)){
+	    				   int index = startersName.indexOf(answer);
+	    				   starter = listOfItems.get(index);
+	    			   }
+	    			   else{
+	    				   System.out.println("You do not have an item named " + answer + " in your menu.");
+	    				   System.out.println("Do you like to try again ? Yes / No");
+	    	    		   answer = sc.nextLine();
+	    	    		   if(answer.toLowerCase().charAt(0) != 'y')
+	    	    			   break;
+	    			   }
+	    		   }
+	    		   
+	    	   }
+	    	   
+	    	   //The meal necessarily contains a main dish, so we do not have to ask.
+	    	   //Same thing than before, he has to select an existing item from his list.
+	    	   
+	    	   ArrayList<String> mainDishesName = new ArrayList<String>();
+			   System.out.println("Choose between your list of main dishes :");
+			   
+			   for(Item i : listOfItems){
+				   if(i.getItemtype() == ItemType.Main_dish){
+	    			   System.out.println(i.getName());
+	    			   mainDishesName.add(i.getName().toLowerCase());
+				   }
+				   else{
+					   mainDishesName.add("");
+				   }
+			   }
+			   
+			   while(mainDish == null){
+				   answer = sc.nextLine().toLowerCase();
+				   if(mainDishesName.contains(answer)){
+					   int index = mainDishesName.indexOf(answer);
+					   mainDish = listOfItems.get(index);
+				   }
+				   else{
+					   System.out.println("You do not have an item named " + answer + " in your menu.");
+					   System.out.println("Do you like to try again ? Yes / No");
+		    		   answer = sc.nextLine();
+		    		   if(answer.toLowerCase().charAt(0) != 'y')
+		    			   break;
+				   }
+			   }
+			   
+	    	   //Exactly the same thing than for starters.
+			   
+			   System.out.println("Does this meal contain a dessert ? Yes / No");
+	    	   answer = sc.nextLine();
+	    	   if(answer.toLowerCase().charAt(0) != 'y'){
+	    		   ArrayList<String> dessertsName = new ArrayList<String>();
+	    		   System.out.println("Choose between your list of desserts :");
+	    		   for(Item i : listOfItems){
+	    			   if(i.getItemtype() == ItemType.Dessert){
+	        			   System.out.println(i.getName());
+	        			   dessertsName.add(i.getName().toLowerCase());
+	    			   }
+	    			   else{
+	    				   dessertsName.add("");
+	    			   }
+	    		   }
+	    		   while(dessert == null){
+	    			   answer = sc.nextLine().toLowerCase();
+	    			   if(dessertsName.contains(answer)){
+	    				   int index = dessertsName.indexOf(answer);
+	    				   dessert = listOfItems.get(index);
+	    			   }
+	    			   else{
+	    				   System.out.println("You do not have an item named " + answer + " in your menu.");
+	    				   System.out.println("Do you like to try again ? Yes / No");
+	    	    		   answer = sc.nextLine();
+	    	    		   if(answer.toLowerCase().charAt(0) != 'y')
+	    	    			   break;
+	    			   }
+	    		   }
+	    		   
+	    	   }
+	    	   
+	    	   //We select the type of the meal according to the user's choices.
+	    	   //If the type is not valid, an exception is thrown.
+	    	   
+	    	   MealType mealType;
+	    	   if(starter == null && dessert != null && mainDish != null)
+	    		   mealType = MealType.MainDish_and_Dessert;
+	    	   else if(starter != null && dessert == null && mainDish != null)
+	    		   mealType = MealType.Starter_and_MainDish;
+	    	   else if(starter != null && dessert != null && mainDish != null)
+	    		   mealType = MealType.Full_meal;
+	    	   else
+	    		   throw new MealNotValid();
+	   		
+	    	   //The regime type is set on vegetarian if all the items from the meal are vegetarian.
+	    	   //Same thing for gluten-free option.
+	    	   //(by default on vegetarian(respectively gluten-free) and get standard if a single item is not vegetarian(respectively gluten-free)).
+	    	
+	    	   for(Item item : mealItems){
+	    		   if(item.getRegimetype() == RegimeType.Standard)
+	    			   regimeType = RegimeType.Standard;
+	    		   if(!item.isGluten_free())
+	    			   glutenFree = false;
+	    	   }
+	    	   
+	    	   Meal meal = new Meal(this, name, mealType, mealItems, regimeType, glutenFree);
+	    	   this.listOfMeals.add(meal);
+	    	   
+	    	 //We check if the user wants to add this meal to his menu, with description of the meal created.
+	    	   
+	    	   System.out.println("Do you want to add this meal to the menu ? \n" + meal.toString());
+	    	   answer = sc.nextLine();
+	    	   if(answer.toLowerCase().charAt(0) != 'y'){
+	    		   this.mealsInMenu.add(meal); 
+	    		   System.out.println("This meal has been added to your menu.");
+	    	   }
+	    	   else{
+	    		   System.out.println("This meal hasn't been added to your menu");
+	    	   }
+    	   }
        }
        
        

@@ -19,7 +19,9 @@ public class Meal extends Food{
 		this.mealItems = mealItems;
 		this.mealItemsPrice = 0;
 		for (Item item : mealItems){
-			this.mealItemsPrice += item.getItemprice();
+			if(item != null){
+				this.mealItemsPrice += item.getItemprice();
+			}
 		}
 		this.regimeType = regimeType;
 		this.glutenFree = glutenFree;
@@ -87,6 +89,11 @@ public class Meal extends Food{
 		if (!Arrays.equals(mealItems, other.mealItems))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString(){
+		return "Meal [mealname = " + this.getName() + ", mealtype = " + this.getMealtype() + ", mealprice = " + this.getMealprice() +  "]";
 	}
 
 
