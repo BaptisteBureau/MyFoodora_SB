@@ -2,7 +2,7 @@ package fr.ecp.IS1220.MyFoodora.Food;
 
 import fr.ecp.IS1220.MyFoodora.Users.Restaurant;
 
-public abstract class Item extends Food{
+public class Item extends Food{
 	private double itemprice;
 	private ItemType itemtype;
 	private RegimeType regimetype;
@@ -57,7 +57,7 @@ public abstract class Item extends Food{
 
 	@Override
 	public String toString() {
-		return "Item [itemname=" + this.getName() + ", itemtype=" + itemtype + "]";
+		return "Item [itemname = " + this.getName() + ", itemtype = " + itemtype + ", itemprice = " + this.getItemprice() +  "]";
 	}
 	
 	

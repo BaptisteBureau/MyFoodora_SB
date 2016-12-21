@@ -1,6 +1,9 @@
 package fr.ecp.IS1220.MyFoodora.Users;
  
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import fr.ecp.IS1220.MyFoodora.Exceptions.*;
 import fr.ecp.IS1220.MyFoodora.Food.*;
 import fr.ecp.IS1220.MyFoodora.Policies.ShippedOrder;
@@ -170,21 +173,100 @@ public class Restaurant extends User{
 
        //Create item
        public void createItem(){
-    	   //choose a name for the item
+    	   Scanner sc = new Scanner(System.in);
+    	   ItemType type = null;
+    	   double price = 0.0;
+    	   boolean glutenFree = false;
+    	   String answer = "";
+    	   RegimeType regimeType = RegimeType.Standard;
     	   
     	   //choose type for the item
-    	   
-    	   //set the price of the item
-    	   
-    	   //is it vegetarian?
-    	   
-    	   //is it gluten free?
-    	   
-    	   Item item = new Item();
-    	   this.listOfItems.add(item);
-    	   
-    	   //do you want to add it to your menu?
-    	   this.menu.add(item);
+    	   System.out.println("Is this item 1 - a starter, 2 - a main dish, or 3 - a dessert ? Choose 1, 2 or 3.");
+    	   //We get the user to enter the type of the item while he can't get the right type and wants to start over.
+    	   while(type == null){
+    		   try{
+	    		   int t = sc.nextInt();
+	    		   if(t==1)
+	    			   type = ItemType.Starter;
+	    		   else if(t==2)
+	    			   type = ItemType.Main_dish;
+	    		   else if(t==3)
+	    			   type = ItemType.Dessert;
+	    		   else{
+	    			   System.out.println("The type you're trying to select is not valid. You should choose a number between 1 and 3.");
+	    			   System.out.println("Do you like to try again ? Yes / No");
+	    			   sc.nextLine();
+	    			   answer = sc.nextLine();
+	    			   if(answer.toLowerCase().charAt(0) != 'y')
+	        			   break;
+	    		   }
+	    	   } catch(InputMismatchException e){
+	    		   System.out.println("You're trying to enter a wrong type. You're supposed to choose a number between 1 and 3.");
+	    		   System.out.println("Do you like to try again ? Yes / No");
+	    		   sc.nextLine();
+	    		   answer = sc.nextLine();
+	    		   if(answer.toLowerCase().charAt(0) != 'y')
+	    			   break;
+	    	   }
+    	   }
+    	   //If we get there while type is still null, means the user failed to select a type and does not want to start over.
+    	   if(type != null){
+	    	   sc.nextLine();
+	    	   //choose a name for the item. Here, we suppose there can't be any mistake in the name.
+	    	   System.out.println("What's the name of this new item ?");
+	    	   String name = sc.nextLine();
+	    
+	    	   //set the price of the item
+	    	   System.out.println("At what price should this item be sold ?");
+	    	   while(price <= 0){
+	    		   try{
+	    			   price = sc.nextDouble();
+		    	   } catch(InputMismatchException e){
+		    		   System.out.println("You're supposed to enter a positive number for the price.");
+		    		   System.out.println("Do you like to try again ? Yes / No");
+	    			   sc.nextLine();
+	    			   answer = sc.nextLine();
+	    			   if(answer.toLowerCase().charAt(0) != 'y')
+	        			   break;
+		    	   }
+		    	   if(price <= 0.0){
+		    		   System.out.println("You're supposed to enter a positive number for the price.");
+		    		   System.out.println("Do you like to try again ? Yes / No");
+	    			   sc.nextLine();
+	    			   answer = sc.nextLine();
+	    			   if(answer.toLowerCase().charAt(0) != 'y')
+	        			   break;
+		    	   }
+	    	   }
+	    	   //if we get there and the price is still nod valid, means the user wants to cancel the creation of this item.
+	    	   if(price > 0.0){
+	    		   //is it vegetarian?
+		    	   System.out.println("Is this item vegetarian ? Yes / No");
+		    	   sc.nextLine();
+		    	   answer = sc.nextLine();
+		    	   if(answer.toLowerCase().charAt(0) != 'y')
+		    		   regimeType = RegimeType.Vegetarian;
+		    	   //is it gluten free?
+		    	   System.out.println("Is this item gluten-free ? Yes / No");
+		    	   answer = sc.nextLine();
+		    	   if(answer.toLowerCase().charAt(0) != 'y')
+		    		   glutenFree = true;
+		    	   Item item = new Item(this, name, type, price, regimeType, glutenFree);
+		    	   this.listOfItems.add(item);
+		    	   
+		    	   //do you want to add this item to your menu?
+		    	   System.out.println("Do you want to add this item to the menu ? \n" + item.toString());
+		    	   answer = sc.nextLine();
+		    	   if(answer.toLowerCase().charAt(0) != 'y'){
+		    		   this.menu.add(item); 
+		    		   System.out.println("This item has been added to your menu.");
+		    	   }
+		    	   else{
+		    		   System.out.println("This item hasn't been added to your menu");
+		    	   }
+	    	   }
+	    	   
+    	   }
        }
        
        
@@ -209,7 +291,7 @@ public class Restaurant extends User{
        }
 
        
-       //Create menu
+       //Create meal
        public void createMeal() throws MealNotValid {
     	   Item starter = null;
     	   Item mainDish = null;
