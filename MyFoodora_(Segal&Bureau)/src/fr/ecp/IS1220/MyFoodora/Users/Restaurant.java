@@ -204,7 +204,7 @@ public class Restaurant extends User{
 	    			   System.out.println("Do you like to try again ? Yes / No");
 	    			   sc.nextLine();
 	    			   answer = sc.nextLine();
-	    			   if(answer.toLowerCase().charAt(0) != 'y')
+	    			   if(!answer.toLowerCase().equals("yes"))
 	        			   break;
 	    		   }
 	    		   
@@ -217,7 +217,7 @@ public class Restaurant extends User{
 	    		   System.out.println("Do you like to try again ? Yes / No");
 	    		   sc.nextLine();
 	    		   answer = sc.nextLine();
-	    		   if(answer.toLowerCase().charAt(0) != 'y')
+	    		   if(!answer.toLowerCase().equals("yes"))
 	    			   break;
 	    	   }
     	   }
@@ -251,7 +251,7 @@ public class Restaurant extends User{
     				   System.out.println("Do you like to try again ? Yes / No");
     	    		   sc.nextLine();
     	    		   answer = sc.nextLine();
-    	    		   if(answer.toLowerCase().charAt(0) != 'y')
+    	    		   if(!answer.toLowerCase().equals("yes"))
     	    			   break;
     			   }
 	    	   }
@@ -274,7 +274,7 @@ public class Restaurant extends User{
 			    		   System.out.println("Do you like to try again ? Yes / No");
 		    			   sc.nextLine(); //Empties the scanner
 		    			   answer = sc.nextLine();
-		    			   if(answer.toLowerCase().charAt(0) != 'y')
+		    			   if(!answer.toLowerCase().equals("yes"))
 		        			   break;
 			    	   }
 		    		   
@@ -283,7 +283,7 @@ public class Restaurant extends User{
 			    		   System.out.println("Do you like to try again ? Yes / No");
 		    			   sc.nextLine(); //Empties the scanner
 		    			   answer = sc.nextLine();
-		    			   if(answer.toLowerCase().charAt(0) != 'y')
+		    			   if(!answer.toLowerCase().equals("yes"))
 		        			   break;
 			    	   }
 		    	   }
@@ -296,14 +296,14 @@ public class Restaurant extends User{
 			    	   System.out.println("Is this item vegetarian ? Yes / No");
 			    	   sc.nextLine(); //Empties the scanner
 			    	   answer = sc.nextLine();
-			    	   if(answer.toLowerCase().charAt(0) != 'y'){
+			    	   if(answer.toLowerCase().equals("yes")){
 			    		   regimeType = RegimeType.Vegetarian;
 			    		   System.out.println("The regime type of this item has been set on vegetarian.");
 			    	   }
 			    	   
 			    	   System.out.println("Is this item gluten-free ? Yes / No");
 			    	   answer = sc.nextLine();
-			    	   if(answer.toLowerCase().charAt(0) != 'y'){
+			    	   if(answer.toLowerCase().equals("yes")){
 			    		   glutenFree = true;
 			    		   System.out.println("This item is defined as gluten-free.");
 			    	   }
@@ -316,7 +316,7 @@ public class Restaurant extends User{
 			    	   
 			    	   System.out.println("Do you want to add this item to the menu ? \n" + item.toString());
 			    	   answer = sc.nextLine();
-			    	   if(answer.toLowerCase().charAt(0) != 'y'){
+			    	   if(answer.toLowerCase().equals("yes")){
 			    		   this.menu.add(item); 
 			    		   System.out.println("This item has been added to your menu.");
 			    	   }
@@ -370,7 +370,7 @@ public class Restaurant extends User{
         	   System.out.println("What's the name of the meal ?");
     		   name = sc.nextLine();
     		   for(Meal m : listOfMeals){
-    			   if(m.getName() == name){
+    			   if(m.getName().equals(name)){
     				   System.out.println("The meal named " + name + " already exists.");
     				   name = "";
     				   break; //Breaks from the for loop only.
@@ -381,7 +381,7 @@ public class Restaurant extends User{
 				   System.out.println("Do you like to try again ? Yes / No");
 	    		   sc.nextLine();
 	    		   answer = sc.nextLine();
-	    		   if(answer.toLowerCase().charAt(0) != 'y')
+	    		   if(!answer.toLowerCase().equals("yes"))
 	    			   break;
 			   }
     	   }
@@ -389,13 +389,13 @@ public class Restaurant extends User{
     	   //If we reach this state without name, means the user wants to cancel the creation of this meal.
     	   //In this case, the method ends.
     	   
-    	   if(name == ""){
+    	   if(name != ""){
     		   
 	    	   //The user has to choose whether the meal contains a starter or not.
     		   
 	    	   System.out.println("Does this meal contain a starter ? Yes / No");
 	    	   answer = sc.nextLine();
-	    	   if(answer.toLowerCase().charAt(0) != 'y'){ //Check if the answer is similar to yes (avoids misunderstanding)
+	    	   if(!answer.toLowerCase().equals("yes")){ //Check if the answer is similar to yes (avoids misunderstanding)
 	    		   
 	    		   //Now, the user has to choose his starter from his starters list.
 	    		   //We create this startersName Array List to link names of items with items themselves.
