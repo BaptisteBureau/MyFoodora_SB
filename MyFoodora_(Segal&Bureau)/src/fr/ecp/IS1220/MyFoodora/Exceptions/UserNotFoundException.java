@@ -1,8 +1,7 @@
 package fr.ecp.IS1220.MyFoodora.Exceptions;
 
+@SuppressWarnings("serial")
 public class UserNotFoundException extends Exception {
-	
-	private static final long serialVersionUID = -3581564961982834423L;
 
 	public UserNotFoundException() {
 		super("This user cannot be found, please try again.");
