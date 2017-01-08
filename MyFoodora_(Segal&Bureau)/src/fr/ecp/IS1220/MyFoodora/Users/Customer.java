@@ -90,27 +90,38 @@ public class Customer extends User{
 	}
 	
 	
-	//Add an order to the Customer's list of orders
+	/**
+	 * Add an order to the Customer's list of orders
+	 * @param order
+	 */
 	public void addOrderToCustomer(Order order){
 		ArrayList<Order> newlist = this.getMyorders();
 		newlist.add(order);
 		this.setMyorders(newlist);
 	}
 	
-	//Order items à-la-carte
+	/**
+	 * Order items à-la-carte
+	 * @param items ordered
+	 */
 	public void orderItemsALaCarte(ArrayList<Food> itemsordered){
 		Order order = new Order(itemsordered, this);
 		this.addOrderToCustomer(order);
 	}
 	
-	//Order meals
+	/**
+	 * Order meals
+	 * @param meals ordered
+	 */
 	public void orderMeal(ArrayList<Food> mealsordered){
 		Order order = new Order(mealsordered, this);
 		this.addOrderToCustomer(order);
 	}
 	
 	
-	//Register to a fidelity card plan
+	/**
+	 * Register to a fidelity card plan
+	 */
 	public void registerToFidelityCard(FidelityCard card) {
 		
 		if(this.card == card){
@@ -118,7 +129,7 @@ public class Customer extends User{
 			return;
 		}
 		
-		/*
+		/**
 		 * If the user had a fidelity card and decides to change, the card gets removed 
 		 * from the system
 		 */
@@ -129,13 +140,17 @@ public class Customer extends User{
 		}
 		this.card = card;
 		
-		//If the user changes to fidelity card, it gets registered for the lottery
+		/**
+		 * If the user changes to fidelity card, it gets registered for the lottery
+		 */
 		if(card == FidelityCard.LotteryCard)
 			lotteryCard = new LotteryFidelityCard(this);
 	}
 		
 	
-	//Unsubscribe from a fidelity card plan
+	/**
+	 * Unsubscribe from a fidelity card plan
+	 */
 	public void unsubscribeFromFidelityCard(){
 		if(this.card == FidelityCard.LotteryCard){
 			ArrayList<LotteryFidelityCard> old = MyFoodoraSystem.getInstance().getActivedLotteryCards();
@@ -149,7 +164,7 @@ public class Customer extends User{
 	}
 	
 	
-	/*
+	/**
 	 * Access the information related to their account: including history of orders, 
 	 * and points acquired with a fidelity program
 	 */
@@ -159,13 +174,17 @@ public class Customer extends User{
 	}
 	
 	
-	//Give consensus to be notified whenever a new special offer is set by any restaurant
+	/**
+	 * Give consensus to be notified whenever a new special offer is set by any restaurant
+	 */
 	public void giveConsensusForNotifications(){
 		this.setAcceptNotifications(true);
 	}
 	
 	
-	//Remove consensus to be notified whenever a new special offer is set by any restaurant
+	/**
+	 * Remove consensus to be notified whenever a new special offer is set by any restaurant
+	 */
 	public void removeConsensusForNotifications(){
 		this.setAcceptNotifications(false);
 	}

@@ -5,6 +5,9 @@ import java.security.NoSuchAlgorithmException;
 
 import java.io.*;
 
+/**
+ * This class permit to secure passwords with an MD5 algorithm
+ */
 public class Password implements Serializable {
 
 	private static final long serialVersionUID = -2139226566254215773L;

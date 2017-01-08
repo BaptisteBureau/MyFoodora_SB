@@ -132,7 +132,10 @@ public class Restaurant extends User{
        }
        
        
-       //Return starters of the restaurant in the menu
+       /**
+        * Return starters of the restaurant in the menu
+        * @return all starters
+        */
        public ArrayList<Item> getStarters() {
     	   ArrayList<Item> starters = this.listOfItems;
     	   for (Item item : starters){
@@ -142,7 +145,10 @@ public class Restaurant extends User{
     	   return starters;
        }
 
-       //Return main dishes of the restaurant in the menu
+       /**
+        * Return main dishes of the restaurant in the menu
+        * @return all main dishes
+        */
        public ArrayList<Item> getMainDishes() {
     	   ArrayList<Item> mainDishes = this.listOfItems;
     	   for (Item item : mainDishes){
@@ -152,7 +158,10 @@ public class Restaurant extends User{
     	   return mainDishes;
        }
 
-       //Return desserts of the restaurant in the menu
+       /**
+        * Return desserts of the restaurant in the menu
+        * @return all desserts
+        */
        public ArrayList<Item> getDesserts() {
     	   ArrayList<Item> desserts = this.listOfItems;
     	   for (Item item : desserts){
@@ -172,7 +181,9 @@ public class Restaurant extends User{
        }
        
 
-       //Create item
+       /**
+        * Permit to create item
+        */
        public void createItem(){
     	   Scanner sc = new Scanner(System.in);
     	   ItemType type = null;
@@ -332,7 +343,11 @@ public class Restaurant extends User{
        }
        
        
-       //Add item to the menu
+       /**
+        * Add item to the menu
+        * @param item
+        * @throws ItemAlreadyInMenuException
+        */
        public void addItemToMenu(Item item) throws ItemAlreadyInMenuException{
              if(this.getMenu().contains(item))
             	 throw new ItemAlreadyInMenuException();
@@ -342,8 +357,12 @@ public class Restaurant extends User{
        }
       
       
-       //Remove item from the menu
-       //Problem if the Item is not in the Menu, exception thrown
+       /**
+        * Remove item from the menu
+        * Problem if the Item is not in the Menu, exception thrown
+        * @param item
+        * @throws ItemNotInMenuException
+        */
        public void removeItemFromMenu(Item item) throws ItemNotInMenuException{
              if(!this.menu.contains(item))
             	 throw new ItemNotInMenuException();
@@ -353,7 +372,10 @@ public class Restaurant extends User{
        }
 
        
-       //Create meal
+       /**
+        * Create meal
+        * @throws MealNotValid
+        */
        @SuppressWarnings("resource")
 	public void createMeal() throws MealNotValid {
     	   Item starter = null;
@@ -546,7 +568,11 @@ public class Restaurant extends User{
        }
        
        
-       //Add meal to the menu
+       /**
+        * Add meal to the menu
+        * @param meal
+        * @throws MealAlreadyInMenuException
+        */
        public void addMealToMenu(Meal meal) throws MealAlreadyInMenuException{
              if (this.mealsInMenu.contains(meal))
             	 throw new MealAlreadyInMenuException();
@@ -557,8 +583,12 @@ public class Restaurant extends User{
        }
       
       
-       //Remove a meal from the menu
-       //Problem if the meal is not in the menu, exception thrown
+       /**
+        * Remove a meal from the menu
+        * Problem if the meal is not in the menu, exception thrown
+        * @param meal
+        * @throws MealNotInMenuException
+        */
        public void removeMealFromMenu(Meal meal) throws MealNotInMenuException{
              if(!this.mealsOfTheWeek.contains(meal))
             	 throw new MealNotInMenuException();
@@ -567,7 +597,12 @@ public class Restaurant extends User{
              }
        }
        
-       //Add meal to the meals of the Week list
+       /**
+        * Add meal to the meals of the Week list
+        * @param meal
+        * @throws MealNotInMenuException
+        * @throws MealAlreadyMealOfTheWeekException
+        */
        public void addMealToMealsOfTheWeek(Meal meal) throws MealNotInMenuException, MealAlreadyMealOfTheWeekException {
            if(!this.mealsInMenu.contains(meal))
         	   throw new MealNotInMenuException();
@@ -578,7 +613,12 @@ public class Restaurant extends User{
            }
        }
        
-       //Remove a meal from the meals of the week list
+       /**
+        * Remove a meal from the meals of the week list
+        * @param meal
+        * @throws MealNotInMenuException
+        * @throws MealNotMealOfTheWeekException
+        */
        public void removeMealFromMealsOfTheWeek(Meal meal) throws MealNotInMenuException, MealNotMealOfTheWeekException {
     	   if(!this.mealsInMenu.contains(meal))
         	   throw new MealNotInMenuException();
@@ -589,7 +629,9 @@ public class Restaurant extends User{
            }
        }
 
-       //Display the menu
+       /**
+        * Display the menu
+        */
        public void showMenu(){
     	   System.out.println("---------- Meals in the Menu ----------");
     	   for (Meal meal : this.getMealsInMenu()){
@@ -602,7 +644,9 @@ public class Restaurant extends User{
     	   }
        }
        
-       //Display the special offers
+       /**
+        * Display the special offers
+        */
        public void showSpecialOffers(){
     	   System.out.println("---------- Special Offers ----------");
     	   for (Meal meal : this.getMealsOfTheWeek()){
@@ -611,7 +655,12 @@ public class Restaurant extends User{
        }
        
        
-       //Find an item with its name
+       /**
+        * Find an item with its name
+        * @param itemName
+        * @return the item
+        * @throws FoodNotFoundException
+        */
        public Item findItemWithName(String itemName) throws FoodNotFoundException{
     	   Item unknownItem = null;
     	   for(Item item : this.listOfItems){
@@ -627,7 +676,12 @@ public class Restaurant extends User{
        }
        
        
-       //Find a meal with its name
+       /**
+        * Find a meal with its name
+        * @param mealName
+        * @return the meal
+        * @throws FoodNotFoundException
+        */
        public Meal findMealWithName(String mealName) throws FoodNotFoundException{
     	   Meal unknownMeal = null;
     	   for(Meal meal : this.listOfMeals){
@@ -642,7 +696,9 @@ public class Restaurant extends User{
     	   return unknownMeal;
        }
       
-       //Sorting of shipped orders
+       /**
+        * Sorting of shipped orders
+        */
        public void sortShippedOrder(){
     	   ShippedOrder policy = MyFoodoraSystem.getInstance().getShippolicy();
     	   if(policy == ShippedOrder.MostLeastOrderedHalfMeal){
@@ -653,7 +709,9 @@ public class Restaurant extends User{
     	   }
        }
        
-       //Return the list of meals from the most shipped to the least shipped
+       /**
+        * @return the list of meals from the most shipped to the least shipped
+        */
        public ArrayList<Meal> getSortedShippedHalfMeals() {
     	   ArrayList<Meal> sortedHalfmeals = new ArrayList<Meal>();
     	   ArrayList<Meal> halfmeals = this.getListOfMeals();
@@ -682,7 +740,9 @@ public class Restaurant extends User{
     	   return sortedHalfmeals;
        }
        
-     //Return the list of items from the most shipped to the least shipped
+     /**
+      * @return the list of items from the most shipped to the least shipped
+      */
        public ArrayList<Item> getSortedShippedItems() {
     	   ArrayList<Item> items = new ArrayList<Item>();
     	   if (this.getMenu().isEmpty()){

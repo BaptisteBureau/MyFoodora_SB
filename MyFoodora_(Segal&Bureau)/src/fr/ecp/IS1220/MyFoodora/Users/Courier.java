@@ -14,7 +14,9 @@ public class Courier extends User{
 	private Order currentDelivery = null;
 	private ArrayList<Order> deliveries;
 	
-	//Actual state of the courier : 0 = off-duty and 1 = on-duty
+	/**
+	 * Actual state of the courier : 0 = off-duty and 1 = on-duty
+	 */
 	private int state = 0;
 	
 
@@ -60,8 +62,11 @@ public class Courier extends User{
 
 	
 	
-    //Register their account to the system
-    //Problem if the account is already registered, throws exception
+    /**
+     * Register their account to the system
+     * Problem if the account is already registered, throws exception
+     * @throws CourierAlreadyRegisteredException
+     */
     public void registerAccount() throws CourierAlreadyRegisteredException{
           ArrayList<Courier> old = MyFoodoraSystem.getInstance().getRegisteredCouriers();
           if(old.contains(this))
@@ -74,8 +79,11 @@ public class Courier extends User{
     }
    
    
-    //Unregister their account to the system
-    //Problem if the account is not registered, throws exception
+    /**
+     * Unregister their account to the system
+     * Problem if the account is not registered, throws exception
+     * @throws CourierNotRegisteredException
+     */
     public void unregisterAccount() throws CourierNotRegisteredException{
           ArrayList<Courier> old = MyFoodoraSystem.getInstance().getRegisteredCouriers();
           if(!old.contains(this))
@@ -96,7 +104,9 @@ public class Courier extends User{
 	}
 	
 	
-	//Accept delivery call
+	/**
+	 * Accept delivery call
+	 */
 	public void acceptDelivery(){
 		if (this.currentDelivery == null){
 			System.out.println("You don't have any deliveries to do.");
@@ -112,7 +122,9 @@ public class Courier extends User{
 	
 
 
-	//Refuse delivery call
+	/**
+	 * Refuse delivery call
+	 */
 	public void refuseDelivery(){
 		this.setState(0);
 		if (this.currentDelivery == null){

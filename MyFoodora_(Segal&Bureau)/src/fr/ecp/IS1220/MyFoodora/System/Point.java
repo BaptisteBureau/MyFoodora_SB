@@ -2,6 +2,9 @@ package fr.ecp.IS1220.MyFoodora.System;
 
 import java.io.*;
 
+/**
+ * This class is used for the address and position of all kind of users
+ */
 public class Point implements Serializable{
 
 	private static final long serialVersionUID = 2792695309218572291L;
@@ -31,6 +34,11 @@ public class Point implements Serializable{
 		this.y = y;
 	}
 	
+	/**
+	 * Compute the distance between the actual point and the point in argument
+	 * @param the second point
+	 * @return the distance between the two points
+	 */
 	public double getDistanceTo(Point p){
 		return Math.sqrt((p.getX()-this.x)*(p.getX()-this.x)+(p.getY()-this.y)*(p.getY()-this.y));
 	}

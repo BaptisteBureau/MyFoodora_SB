@@ -14,7 +14,9 @@ public class Order implements Serializable{
 	
 	private static final long serialVersionUID = -8932318025282018506L;
 	
-	//Status of the order : 0 = waiting for delivery and 1 = delivered
+	/**
+	 * Status of the order : 0 = waiting for delivery and 1 = delivered
+	 */
 	private int status;
 	private ArrayList<Item> orderedItems;
 	private ArrayList<Meal> orderedMeals;
@@ -24,7 +26,9 @@ public class Order implements Serializable{
 	private Calendar orderdate;
 	private Courier courier;
 	
-	//Profit-related information at the time of the order
+	/**
+	 * Profit-related information at the time of the order
+	 */
 	private double serviceFee;
 	private double markupPercentage;
 	private double deliveryCost;
@@ -62,7 +66,7 @@ public class Order implements Serializable{
 		this.deliveryCost = MyFoodoraSystem.getInstance().getDeliveryCost();
 		this.orderprice += this.serviceFee;
 		
-		/*
+		/**
 		 * If the customer has a point fidelity card, we check if he has a discount, 
 		 * then add the number of points brought by his order.
 		 */
@@ -76,7 +80,9 @@ public class Order implements Serializable{
 			customer.pointCard.setPoints(oldpoints + points);
 		}
 		
-		//If the customer has a lottery card, we check if he has won.
+		/**
+		 * If the customer has a lottery card, we check if he has won.
+		 */
 		if(customer.getCard() == FidelityCard.LotteryCard){
 			if(customer == system.getLotteryWinner())
 				orderprice = 0.0;

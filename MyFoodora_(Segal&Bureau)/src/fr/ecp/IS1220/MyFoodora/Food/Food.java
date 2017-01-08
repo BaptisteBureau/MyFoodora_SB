@@ -41,7 +41,9 @@ public abstract class Food implements Serializable{
 	}
 
 	
-	//To avoid copies in menus and other food lists (inside a restaurant)
+	/**
+	 * To avoid copies in menus and other food lists (inside a restaurant)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

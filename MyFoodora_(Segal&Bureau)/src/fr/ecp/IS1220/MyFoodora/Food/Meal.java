@@ -63,6 +63,10 @@ public class Meal extends Food{
 		return glutenFree;
 	}
 
+	/**
+	 * Compute the meal price whether it's a special offer or not
+	 * @return the meal price
+	 */
 	public double getMealprice() {
 		if (this.getRestaurant().getMealsOfTheWeek().contains(this)){
 			return (this.mealItemsPrice*(1-this.getRestaurant().getSpecific_discount_factor()));
