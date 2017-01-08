@@ -759,6 +759,7 @@ public class CommandLine {
     public static void main(String[] args) throws IOException, UserNotFoundException {
 
         CommandLine commandLine = new CommandLine();
+        //If we suppress the load step, we start with a new system
         commandLine.load();
         commandLine.run();
         commandLine.save();
