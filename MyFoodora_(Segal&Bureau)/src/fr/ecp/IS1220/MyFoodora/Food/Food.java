@@ -1,8 +1,12 @@
 package fr.ecp.IS1220.MyFoodora.Food;
 
 import fr.ecp.IS1220.MyFoodora.Users.Restaurant;
+import java.io.*;
 
-public abstract class Food {
+public abstract class Food implements Serializable{
+
+	private static final long serialVersionUID = 1561671486560168208L;
+	
 	private Restaurant restaurant;
 	private String name;
 	

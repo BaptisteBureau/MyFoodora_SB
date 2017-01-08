@@ -1,17 +1,24 @@
 package fr.ecp.IS1220.MyFoodora.Users;
 
-public abstract class User {
+import fr.ecp.IS1220.MyFoodora.System.Password;
+import java.io.*;
+
+public abstract class User implements Serializable{
+
+	private static final long serialVersionUID = 883693267585561128L;
+	
 	private String name;
 	private String username;
-	private double hashedPassword;
+	private Password hashedPassword;
 	private static int counter = 0;
 	private int id;
+	private boolean status ;
 	
-	public User(String name, String username, double hashedPassword) {
+	public User(String name, String username, String password) {
 		super();
 		this.name = name;
 		this.username = username;
-		this.hashedPassword = hashedPassword;
+		this.hashedPassword = new Password(password) ;
 		this.id = counter;
 		counter ++;
 	}
@@ -33,18 +40,22 @@ public abstract class User {
 		this.username = username;
 	}
 
-	public double getHashedPassword() {
+	public Password getHashedPassword() {
 		return hashedPassword;
-	}
-
-	public void setHashedPassword(double hashedPassword) {
-		this.hashedPassword = hashedPassword;
 	}
 
 	public int getId() {
 		return id;
 	}
 
+	public void activate(){status = true;}
+
+	public void disactivate(){status = false;}
+
+	public boolean getStatus(){return status;}
+
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,5 +78,10 @@ public abstract class User {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", username=" + username + ", status=" + status + "]";
+	}
+	
 	
 }

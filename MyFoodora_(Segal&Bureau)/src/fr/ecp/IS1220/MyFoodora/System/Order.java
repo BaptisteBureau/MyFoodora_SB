@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import java.io.*;
+
 import fr.ecp.IS1220.MyFoodora.Food.*;
 import fr.ecp.IS1220.MyFoodora.Policies.FidelityCard;
 import fr.ecp.IS1220.MyFoodora.Users.*;
 
-public class Order {
+public class Order implements Serializable{
+	
+	private static final long serialVersionUID = -8932318025282018506L;
+	
 	//Status of the order : 0 = waiting for delivery and 1 = delivered
 	private int status;
 	private ArrayList<Item> orderedItems;
@@ -62,9 +67,9 @@ public class Order {
 		 * then add the number of points brought by his order.
 		 */
 		if(customer.getCard() == FidelityCard.PointCard){
-			if(customer.pointCard.isDiscount()){
+			if(customer.pointCard.offerDiscount()){
 				this.orderprice *= 0.9;
-				customer.pointCard.setDiscount(false);
+				customer.pointCard.reinitializeCard();
 			}
 			int points = (int)this.orderprice/10;
 			int oldpoints = customer.pointCard.getPoints();
@@ -73,12 +78,10 @@ public class Order {
 		
 		//If the customer has a lottery card, we check if he has won.
 		if(customer.getCard() == FidelityCard.LotteryCard){
-			if(customer.lotteryCard == system.getWinner())
+			if(customer == system.getLotteryWinner())
 				orderprice = 0.0;
 		}
 		
-		//Add the order to the list of this restaurant's orders
-		restaurant.addShippedOrder(this);
 	}
 	
 	

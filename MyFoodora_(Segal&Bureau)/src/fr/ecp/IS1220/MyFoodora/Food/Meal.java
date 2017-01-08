@@ -1,19 +1,22 @@
 package fr.ecp.IS1220.MyFoodora.Food;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import fr.ecp.IS1220.MyFoodora.Users.Restaurant;
 
 public class Meal extends Food{
+	
+	private static final long serialVersionUID = 8577739057974583512L;
+	
 	private MealType mealtype;
 	private double mealItemsPrice;
-	private Item[] mealItems;
+	private ArrayList<Item> mealItems;
 	private int counter;
 	private RegimeType regimeType;
 	private boolean glutenFree;
 	
 
-	public Meal(Restaurant restaurant, String name, MealType mealtype, Item[] mealItems, RegimeType regimeType, boolean glutenFree) {
+	public Meal(Restaurant restaurant, String name, MealType mealtype, ArrayList<Item> mealItems, RegimeType regimeType, boolean glutenFree) {
 		super(restaurant, name);
 		this.mealtype = mealtype;
 		this.mealItems = mealItems;
@@ -27,11 +30,19 @@ public class Meal extends Food{
 		this.glutenFree = glutenFree;
 	}
 
-	public Item[] getMealItems() {
+	public ArrayList<Item> getMealItems() {
 		return mealItems;
 	}
+	
+	public ArrayList<String> getItemNames() {
+		ArrayList<String> itemNames = new ArrayList<String>();
+		for (Item item : this.mealItems){
+			itemNames.add(item.getName());
+		}
+		return itemNames;
+	}
 
-	public void setMealItems(Item[] mealItems) {
+	public void setMealItems(ArrayList<Item> mealItems) {
 		this.mealItems = mealItems;
 	}
 
@@ -68,12 +79,12 @@ public class Meal extends Food{
 		this.getRestaurant().incrementCounter();
 	}
 	
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Arrays.hashCode(mealItems);
+		result = prime * result + ((mealItems == null) ? 0 : mealItems.hashCode());
 		return result;
 	}
 
@@ -86,14 +97,17 @@ public class Meal extends Food{
 		if (getClass() != obj.getClass())
 			return false;
 		Meal other = (Meal) obj;
-		if (!Arrays.equals(mealItems, other.mealItems))
+		if (mealItems == null) {
+			if (other.mealItems != null)
+				return false;
+		} else if (!mealItems.equals(other.mealItems))
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString(){
-		return "Meal [mealname = " + this.getName() + ", mealtype = " + this.getMealtype() + ", mealprice = " + this.getMealprice() +  "]";
+		return "Meal [mealname = " + this.getName() + ", mealItems = " + this.getItemNames() + ", mealtype = " + this.getMealtype() + ", mealprice = " + this.getMealprice() +  "]";
 	}
 
 

@@ -10,7 +10,10 @@ import fr.ecp.IS1220.MyFoodora.Policies.ShippedOrder;
 import fr.ecp.IS1220.MyFoodora.System.*;
  
 public class Restaurant extends User{
-       private Point adress;
+
+	private static final long serialVersionUID = -6063211111892304745L;
+	
+	private Point adress;
        private ArrayList<Item> listOfItems;
        private ArrayList<Item> menu;
        private ArrayList<Meal> listOfMeals;
@@ -19,12 +22,11 @@ public class Restaurant extends User{
        private double generic_discount_factor;
        private double specific_discount_factor;
        private ArrayList<Order> shippedOrder;
-       private MyFoodoraSystem system = MyFoodoraSystem.getInstance();
        private int counter = 0;
 
 
-       public Restaurant(String name, Point adress, String username, double hashedPassword) {
-             super(name, username, hashedPassword);
+       public Restaurant(String name, Point adress, String username, String password) {
+             super(name, username, password);
              this.adress = adress;
              this.listOfItems = new ArrayList<Item>();
              this.menu = new ArrayList<Item>();
@@ -35,9 +37,9 @@ public class Restaurant extends User{
        }
  
  
-       public Restaurant(String name, Point adress, String username, double hashedPassword,
+       public Restaurant(String name, Point adress, String username, String password,
                     double generic_discount_factor, double specific_discount_factor) {
-             super(name, username, hashedPassword);
+             super(name, username, password);
              this.adress = adress;
              this.listOfItems = new ArrayList<Item>();
              this.menu = new ArrayList<Item>();
@@ -124,9 +126,8 @@ public class Restaurant extends User{
        public void setShippedOrder(ArrayList<Order> shippedOrder) {
     	   this.shippedOrder = shippedOrder;
        }
-
-
-       public void addShippedOrder(Order order){
+       
+       public void addOrder(Order order){
     	   this.shippedOrder.add(order);
        }
        
@@ -353,11 +354,12 @@ public class Restaurant extends User{
 
        
        //Create meal
-       public void createMeal() throws MealNotValid {
+       @SuppressWarnings("resource")
+	public void createMeal() throws MealNotValid {
     	   Item starter = null;
     	   Item mainDish = null;
     	   Item dessert = null;
-    	   Item[] mealItems = {starter, mainDish, dessert};
+    	   ArrayList<Item> mealItems = new ArrayList<Item>();
     	   String name = "";
     	   String answer = "";
     	   Scanner sc = new Scanner(System.in);
@@ -421,6 +423,7 @@ public class Restaurant extends User{
 	    			   if(startersName.contains(answer)){
 	    				   int index = startersName.indexOf(answer);
 	    				   starter = listOfItems.get(index);
+	    				   mealItems.add(starter);
 	    			   }
 	    			   else{
 	    				   System.out.println("You do not have an item named " + answer + " in your menu.");
@@ -454,6 +457,7 @@ public class Restaurant extends User{
 				   if(mainDishesName.contains(answer)){
 					   int index = mainDishesName.indexOf(answer);
 					   mainDish = listOfItems.get(index);
+					   mealItems.add(mainDish);
 				   }
 				   else{
 					   System.out.println("You do not have an item named " + answer + " in your menu.");
@@ -485,6 +489,7 @@ public class Restaurant extends User{
 	    			   if(dessertsName.contains(answer)){
 	    				   int index = dessertsName.indexOf(answer);
 	    				   dessert = listOfItems.get(index);
+	    				   mealItems.add(dessert);
 	    			   }
 	    			   else{
 	    				   System.out.println("You do not have an item named " + answer + " in your menu.");
@@ -534,7 +539,7 @@ public class Restaurant extends User{
 	    		   System.out.println("This meal has been added to your menu.");
 	    	   }
 	    	   else{
-	    		   System.out.println("This meal hasn't been added to your menu");
+	    		   System.out.println("This meal has been created but hasn't been added to your menu");
 	    	   }
     	   }
     	   sc.close();
@@ -584,10 +589,62 @@ public class Restaurant extends User{
            }
        }
 
+       //Display the menu
+       public void showMenu(){
+    	   System.out.println("---------- Meals in the Menu ----------");
+    	   for (Meal meal : this.getMealsInMenu()){
+           		System.out.println(meal);
+           }
+    	   
+    	   System.out.println("\n ---------- Items in the Menu ----------");
+    	   for (Item item : this.getMenu()){
+              	System.out.println(item);
+    	   }
+       }
+       
+       //Display the special offers
+       public void showSpecialOffers(){
+    	   System.out.println("---------- Special Offers ----------");
+    	   for (Meal meal : this.getMealsOfTheWeek()){
+           		System.out.println(meal);
+           }
+       }
+       
+       
+       //Find an item with its name
+       public Item findItemWithName(String itemName) throws FoodNotFoundException{
+    	   Item unknownItem = null;
+    	   for(Item item : this.listOfItems){
+    		   if(item.getName().equals(itemName)){
+    			   unknownItem = item;
+    		   }
+    	   }
+    	   if (unknownItem == null){
+    		   System.out.println("You don't have an item called like this.");
+    		   throw new FoodNotFoundException();
+    	   }
+    	   return unknownItem;
+       }
+       
+       
+       //Find a meal with its name
+       public Meal findMealWithName(String mealName) throws FoodNotFoundException{
+    	   Meal unknownMeal = null;
+    	   for(Meal meal : this.listOfMeals){
+    		   if(meal.getName().equals(mealName)){
+    			   unknownMeal = meal;
+    		   }
+    	   }
+    	   if (unknownMeal == null){
+    		   System.out.println("You don't have a meal called like this.");
+    		   throw new FoodNotFoundException();
+    	   }
+    	   return unknownMeal;
+       }
       
        //Sorting of shipped orders
        public void sortShippedOrder(){
-    	   ShippedOrder policy = system.getShippolicy();
+    	   ShippedOrder policy = MyFoodoraSystem.getInstance().getShippolicy();
     	   if(policy == ShippedOrder.MostLeastOrderedHalfMeal){
     		   System.out.println(this.getSortedShippedHalfMeals());
     	   }
@@ -643,5 +700,14 @@ public class Restaurant extends User{
     	   }
     	   return items;
        }
+
+
+	@Override
+	public String toString() {
+		return "Restaurant [name=" + this.getName() + ", username=" + this.getUsername() + ", status=" + this.getStatus() + ", adress=" + adress + "]";
+	}
+
+
+
        
 }

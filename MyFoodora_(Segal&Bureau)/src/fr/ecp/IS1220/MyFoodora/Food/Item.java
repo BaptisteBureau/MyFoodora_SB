@@ -3,6 +3,9 @@ package fr.ecp.IS1220.MyFoodora.Food;
 import fr.ecp.IS1220.MyFoodora.Users.Restaurant;
 
 public class Item extends Food{
+	
+	private static final long serialVersionUID = 4001159573645755647L;
+	
 	private double itemprice;
 	private ItemType itemtype;
 	private RegimeType regimetype;

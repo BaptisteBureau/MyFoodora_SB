@@ -1,5 +1,6 @@
 package fr.ecp.IS1220.MyFoodora.Exceptions;
 
+@SuppressWarnings("serial")
 public class MealAlreadyMealOfTheWeekException extends Exception{
 	
 	public MealAlreadyMealOfTheWeekException(){

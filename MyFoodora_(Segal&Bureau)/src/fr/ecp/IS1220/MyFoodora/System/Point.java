@@ -1,6 +1,11 @@
 package fr.ecp.IS1220.MyFoodora.System;
 
-public class Point {
+import java.io.*;
+
+public class Point implements Serializable{
+
+	private static final long serialVersionUID = 2792695309218572291L;
+	
 	double x;
 	double y;
 	

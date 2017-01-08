@@ -7,26 +7,26 @@ import fr.ecp.IS1220.MyFoodora.Policies.*;
 import fr.ecp.IS1220.MyFoodora.System.*;
 
 public class Customer extends User{
+
+	private static final long serialVersionUID = -6016626276476033983L;
+	
 	private String surname;
-	private double[] adress = {0.0, 0.0};
+	private Point adress;
 	private String email;
-	private long phone;
-	private String username;
+	private String phone;
 	private boolean acceptNotifications = false;
 	private ArrayList<Order> myorders;
 	private FidelityCard card = FidelityCard.BasicCard;
 	public PointFidelityCard pointCard = new PointFidelityCard();
 	public LotteryFidelityCard lotteryCard = null;
-	private MyFoodoraSystem system = MyFoodoraSystem.getInstance();
 	
 
-	public Customer(String name, String surname, double[] adress, String email, long phone, String username, double hashedPassword) {
-		super(name, username, hashedPassword);
+	public Customer(String name, String surname, Point adress, String email, String phone, String username, String password) {
+		super(name, username, password);
 		this.surname = surname;
 		this.adress = adress;
 		this.email = email;
 		this.phone = phone;
-		this.username = username;
 		this.myorders = new ArrayList<Order>();
 	}
 
@@ -35,27 +35,6 @@ public class Customer extends User{
 	public FidelityCard getCard() {
 		return card;
 	}
-
-
-
-	public void setCard(FidelityCard card) {
-		
-		/*
-		 * If the user had a fidelity card and decides to change, the card gets removed 
-		 * from the system
-		 */
-		if(this.card == FidelityCard.LotteryCard){
-			ArrayList<LotteryFidelityCard> old = system.getActivedLotteryCards();
-			old.remove(this.card);
-			system.setActivedLotteryCards(old);
-		}
-		this.card = card;
-		
-		//If the user changes to fidelity card, it gets registered for the lottery
-		if(card == FidelityCard.LotteryCard)
-			lotteryCard = new LotteryFidelityCard();
-	}
-
 
 
 	public boolean isAcceptNotifications() {
@@ -86,11 +65,11 @@ public class Customer extends User{
 		this.surname = surname;
 	}
 
-	public double[] getAdress() {
+	public Point getAdress() {
 		return adress;
 	}
 
-	public void setAdress(double[] adress) {
+	public void setAdress(Point adress) {
 		this.adress = adress;
 	}
 
@@ -102,22 +81,13 @@ public class Customer extends User{
 		this.email = email;
 	}
 
-	public long getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(long phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
 	
 	
 	//Add an order to the Customer's list of orders
@@ -141,14 +111,41 @@ public class Customer extends User{
 	
 	
 	//Register to a fidelity card plan
-	public void registerToFidelityCard(){
+	public void registerToFidelityCard(FidelityCard card) {
 		
+		if(this.card == card){
+			System.out.println("You already have this fidelity card, try again if you want to change.");
+			return;
+		}
+		
+		/*
+		 * If the user had a fidelity card and decides to change, the card gets removed 
+		 * from the system
+		 */
+		if(this.card == FidelityCard.LotteryCard){
+			ArrayList<LotteryFidelityCard> old = MyFoodoraSystem.getInstance().getActivedLotteryCards();
+			old.remove(this.card);
+			MyFoodoraSystem.getInstance().setActivedLotteryCards(old);
+		}
+		this.card = card;
+		
+		//If the user changes to fidelity card, it gets registered for the lottery
+		if(card == FidelityCard.LotteryCard)
+			lotteryCard = new LotteryFidelityCard(this);
 	}
-	
+		
 	
 	//Unsubscribe from a fidelity card plan
 	public void unsubscribeFromFidelityCard(){
-		
+		if(this.card == FidelityCard.LotteryCard){
+			ArrayList<LotteryFidelityCard> old = MyFoodoraSystem.getInstance().getActivedLotteryCards();
+			old.remove(this.card);
+			MyFoodoraSystem.getInstance().setActivedLotteryCards(old);
+		}
+		if(this.card == FidelityCard.PointCard){
+			this.pointCard.reinitializeCard();
+		}
+		this.registerToFidelityCard(FidelityCard.BasicCard);
 	}
 	
 	
@@ -173,4 +170,13 @@ public class Customer extends User{
 		this.setAcceptNotifications(false);
 	}
 
+
+
+	@Override
+	public String toString() {
+		return "Customer [name=" + this.getName() + ", username=" + this.getUsername() + ", status=" + this.getStatus() + ", surname=" + surname + ", adress=" + adress + ", email=" + email + ", phone="
+				+ phone + ", acceptNotifications=" + acceptNotifications + ", card=" + card + "]";
+	}
+
+	
 }
