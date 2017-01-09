@@ -18,6 +18,7 @@ public abstract class User implements Serializable{
 		super();
 		this.name = name;
 		this.username = username;
+		this.status = true;
 		this.hashedPassword = new Password(password) ;
 		this.id = counter;
 		counter ++;
@@ -73,7 +74,7 @@ public abstract class User implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (username.equals(other.username))
+		if (!username.equals(other.username))
 			return false;
 		return true;
 	}

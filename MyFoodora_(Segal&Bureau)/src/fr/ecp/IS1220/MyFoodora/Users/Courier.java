@@ -2,7 +2,6 @@ package fr.ecp.IS1220.MyFoodora.Users;
 
 import java.util.ArrayList;
 
-import fr.ecp.IS1220.MyFoodora.Exceptions.*;
 import fr.ecp.IS1220.MyFoodora.System.*;
 
 public class Courier extends User{
@@ -17,7 +16,7 @@ public class Courier extends User{
 	/**
 	 * Actual state of the courier : 0 = off-duty and 1 = on-duty
 	 */
-	private int state = 0;
+	private int state = 1;
 	
 
 	public Courier(String name, Point position, String phone, String username, String password) {
@@ -59,41 +58,7 @@ public class Courier extends User{
 	public void setState(int state) {
 		this.state = state;
 	}
-
 	
-	
-    /**
-     * Register their account to the system
-     * Problem if the account is already registered, throws exception
-     * @throws CourierAlreadyRegisteredException
-     */
-    public void registerAccount() throws CourierAlreadyRegisteredException{
-          ArrayList<Courier> old = MyFoodoraSystem.getInstance().getRegisteredCouriers();
-          if(old.contains(this))
-                 throw new CourierAlreadyRegisteredException();
-          else
-          {
-                 old.add(this);
-                 MyFoodoraSystem.getInstance().setRegisteredCouriers(old);
-          }   
-    }
-   
-   
-    /**
-     * Unregister their account to the system
-     * Problem if the account is not registered, throws exception
-     * @throws CourierNotRegisteredException
-     */
-    public void unregisterAccount() throws CourierNotRegisteredException{
-          ArrayList<Courier> old = MyFoodoraSystem.getInstance().getRegisteredCouriers();
-          if(!old.contains(this))
-                 throw new CourierNotRegisteredException();
-          else
-          {
-                 old.remove(this);
-                 MyFoodoraSystem.getInstance().setRegisteredCouriers(old);
-          }
-    }
 	
 	public Order getCurrentDelivery() {
 		return currentDelivery;
@@ -117,6 +82,7 @@ public class Courier extends User{
 			order.getCustomer().addOrderToCustomer(order);
 			order.getRestaurant().addOrder(order);
 			this.deliveries.add(order);
+			MyFoodoraSystem.getInstance().addDeliveredOrders(order);
 		}
 	}
 	

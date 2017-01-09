@@ -1,0 +1,61 @@
+login "ceo" "123456"
+registerRestaurant "McDonalds" "5,5" "mcdonalds" "firstmacdo"
+showAllUsers
+disactivateUser "McDonalds"
+showAllUsers
+activateUser "McDonalds"
+showAllUsers
+removeUser "McDonalds"
+showAllUsers
+registerRestaurant "McDonalds" "5,5" "mcdonalds" "firstmacdo"
+registerRestaurant "Pizzeria" "10,4" "pizzeria" "firstpizza"
+registerRestaurant "Kebab" "-3,7" "kebab" "firstkebab"
+registerCustomer "Maxime" "Ségal" "Max" "40,25" "maxime.segal@student.ecp.fr" "0618598524" "maxime" "maxime1104"
+registerCustomer "Baptiste" "Bureau" "Bob" "30,20" "baptiste.bureau@student.ecp.fr" "0635481857" "baptiste" "baptiste1104"
+registerCourier "Donald" "Trump" "5,10" "0659428168" "donald" "president"
+registerCourier "Hillary" "Clinton" "20,18" "0624598407" "hillary" "loser"
+registerCourier "Hillary" "Clinton" "20,18" "0624598407" "hillary" "loser"
+registerManager "Alix" "Mallard" "alix" "07101996"
+showAllUsers
+login "mcdonalds" "firstmacdo"
+logout
+login "mcdonalds" "firstmacd"
+login "mcdonalds" "firstmacdo"
+createItem
+createItem
+createMeal
+showMyMenu
+logout
+login "pizzeria" "firstpizza"
+createItem
+logout
+login "kebab" "firstkebab"
+createItem
+logout
+login "maxime" "maxime1104"
+showRestaurants
+showMenu "McDonalds"
+startOrder "McDonalds"
+addMeal2Order "Best Of"
+addItem2Order "BigMac"
+addItem2Order "French Fries"
+showOrder
+endOrder
+registerFidelityCard "BasicFidelityCard"
+logout
+login "donald" "president"
+accept
+changePosition "40,25"
+logout
+logout
+login "alix" "07101996"
+showAllUsers
+showAllShippedOrders
+showTotalIncome
+showAverageIncomePerCustomer
+showServiceFee
+showMarkupPercentage
+showDeliveryCost
+showRestaurantTop
+showCourierTop
+logout

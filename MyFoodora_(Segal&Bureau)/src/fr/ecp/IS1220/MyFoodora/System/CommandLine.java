@@ -101,7 +101,9 @@ public class CommandLine {
             		if (commands.length == 5) {
                         Restaurant restaurant = new Restaurant(commands[1], StringToAdressPoint(commands[2]), commands[3], commands[4]);
                         Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
-                        manager.addUser(restaurant);
+                        try {
+							manager.addUser(restaurant);
+						} catch (NameAlreadyUsedException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -111,17 +113,21 @@ public class CommandLine {
                     if (commands.length == 9) {
                     	Customer customer = new Customer(commands[1] + " " + commands[2], commands[3], StringToAdressPoint(commands[4]), commands[5], commands[6], commands[7], commands[8]);
                         Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
-                        manager.addUser(customer);
+                        try {
+							manager.addUser(customer);
+						} catch (NameAlreadyUsedException e) {}
                     } else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
             	
             case "registerCourier":
             	if(myFoodoraSystem.getCurrentUser() instanceof Manager){
-            		if (commands.length == 6) {
+            		if (commands.length == 7) {
             			Courier courier = new Courier(commands[1] + " " + commands[2], StringToAdressPoint(commands[3]), commands[4], commands[5], commands[6]);
                         Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
-                        manager.addUser(courier);
+                        try {
+							manager.addUser(courier);
+						} catch (NameAlreadyUsedException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -131,7 +137,9 @@ public class CommandLine {
             		if (commands.length == 5) {
             			Manager newManager = new Manager(commands[1] + " " + commands[2], commands[3], commands[4]);
                         Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
-                        manager.addUser(newManager);
+                        try {
+							manager.addUser(newManager);
+						} catch (NameAlreadyUsedException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -149,9 +157,7 @@ public class CommandLine {
 						try {
 							User user = myFoodoraSystem.findUserWithName(commands[1]);
 	                        manager.removeUser(user);
-						} catch (UserNotFoundException e) {
-							e.printStackTrace();
-						}
+						} catch (UserNotFoundException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -163,9 +169,7 @@ public class CommandLine {
 						try {
 							User user = myFoodoraSystem.findUserWithName(commands[1]);
 	                        manager.deactivateUser(user);
-						} catch (UserNotFoundException e) {
-							e.printStackTrace();
-						}
+						} catch (UserNotFoundException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -177,9 +181,7 @@ public class CommandLine {
 						try {
 							User user = myFoodoraSystem.findUserWithName(commands[1]);
 	                        manager.activateUser(user);
-						} catch (UserNotFoundException e) {
-							e.printStackTrace();
-						}
+						} catch (UserNotFoundException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -200,9 +202,7 @@ public class CommandLine {
 	            				customer.registerToFidelityCard(FidelityCard.PointCard);
 	            				break;
 	                        }
-						} catch (UserNotFoundException e) {
-							e.printStackTrace();
-						}
+						} catch (UserNotFoundException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -241,9 +241,7 @@ public class CommandLine {
             			try {
             				startDate.setTime(sdf.parse(commands[1] + "00:00:00"));
                 			endDate.setTime(sdf.parse(commands[2] + "23:59:59"));
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
+						} catch (ParseException e) {}
                         Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
                         manager.computeTotalIncome(startDate, endDate);
             		} else {System.out.println("The input doesn't correspond to what is expected");}
@@ -256,7 +254,7 @@ public class CommandLine {
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
                 
-            case "ShowAverageIncomePerCustomer":
+            case "showAverageIncomePerCustomer":
             	if(myFoodoraSystem.getCurrentUser() instanceof Manager){
             		Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
             		System.out.println("Average Income Per Customer = " + manager.averageIncomePerCustomer());
@@ -308,25 +306,25 @@ public class CommandLine {
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
                 
-            case "showService_fee":
+            case "showServiceFee":
             	if(myFoodoraSystem.getCurrentUser() instanceof Manager){
             		System.out.println("Service Fee = " + myFoodoraSystem.getServiceFee());
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
                 
-            case "showMarkup_Percentage":
+            case "showMarkupPercentage":
             	if(myFoodoraSystem.getCurrentUser() instanceof Manager){
             		System.out.println("Mark-Up Percentage = " + myFoodoraSystem.getMarkupPercentage());
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
                 
-            case "showDelivery_Cost":
+            case "showDeliveryCost":
             	if(myFoodoraSystem.getCurrentUser() instanceof Manager){
             		System.out.println("Delivery Cost = " + myFoodoraSystem.getDeliveryCost());
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
                 
-            case "showRestaurants":
+            case "showRestaurantTop":
             	if(myFoodoraSystem.getCurrentUser() instanceof Manager){
                     Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
                     manager.sortRestaurants();
@@ -339,7 +337,7 @@ public class CommandLine {
                 } else {System.out.println("You're not authorized to do that.");}
                 break;
                 
-            case "showCouriers":
+            case "showCourierTop":
             	if(myFoodoraSystem.getCurrentUser() instanceof Manager){
                     Manager manager = (Manager)myFoodoraSystem.getCurrentUser();
                     manager.sortCouriers();
@@ -374,6 +372,7 @@ public class CommandLine {
             case "createItem":
             	if(myFoodoraSystem.getCurrentUser() instanceof Restaurant){
             		if (commands.length == 1) {
+            			System.out.println("You want to create an item.");
                         Restaurant restaurant = (Restaurant)myFoodoraSystem.getCurrentUser();
                         restaurant.createItem();
             		} else {System.out.println("The input doesn't correspond to what is expected");}
@@ -383,12 +382,11 @@ public class CommandLine {
             case "createMeal":
             	if(myFoodoraSystem.getCurrentUser() instanceof Restaurant){
             		if (commands.length == 1) {
+            			System.out.println("You want to create an meal.");
                         Restaurant restaurant = (Restaurant)myFoodoraSystem.getCurrentUser();
                         try {
 							restaurant.createMeal();
-						} catch (MealNotValid e) {
-							e.printStackTrace();
-						}
+						} catch (MealNotValid e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -399,9 +397,7 @@ public class CommandLine {
                         Restaurant restaurant = (Restaurant)myFoodoraSystem.getCurrentUser();
                         try {
 							System.out.println(restaurant.findMealWithName(commands[1]));
-						} catch (FoodNotFoundException e) {
-							e.printStackTrace();
-						}
+						} catch (FoodNotFoundException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -421,10 +417,7 @@ public class CommandLine {
                         Restaurant restaurant = (Restaurant)myFoodoraSystem.getCurrentUser();
                         try {
 							restaurant.addMealToMealsOfTheWeek(restaurant.findMealWithName(commands[1]));
-						} catch (MealNotInMenuException | MealAlreadyMealOfTheWeekException | FoodNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						} catch (MealNotInMenuException | MealAlreadyMealOfTheWeekException | FoodNotFoundException e) {}
             		} else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that.");}
                 break;
@@ -435,10 +428,7 @@ public class CommandLine {
                         Restaurant restaurant = (Restaurant)myFoodoraSystem.getCurrentUser();
                         try {
 							restaurant.removeMealFromMealsOfTheWeek(restaurant.findMealWithName(commands[1]));
-						} catch (MealNotInMenuException | MealNotMealOfTheWeekException | FoodNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						} catch (MealNotInMenuException | MealNotMealOfTheWeekException | FoodNotFoundException e) {}
                     } else {System.out.println("The input doesn't correspond to what is expected");}
     			} else {System.out.println("You're not authorized to do that.");}
     			break;
@@ -474,7 +464,7 @@ public class CommandLine {
 
                 
             //Customer
-            case "showRestaurant":
+            case "showRestaurants":
                 if (commands.length == 1) {
                 	for (Restaurant restaurant : myFoodoraSystem.getRegisteredRestaurants()){
                     	System.out.println(restaurant);
@@ -486,9 +476,7 @@ public class CommandLine {
                 if (commands.length == 2) {
                 	try {
 						myFoodoraSystem.findRestaurantWithName(commands[1]).showMenu();
-					} catch (UserNotFoundException e) {
-						e.printStackTrace();
-					}
+					} catch (UserNotFoundException e) {}
                 } else {System.out.println("The input doesn't correspond to what is expected");}
                 break;
                 
@@ -498,9 +486,7 @@ public class CommandLine {
             		if (commands.length == 2) {
                     	try {
 							myFoodoraSystem.findRestaurantWithName(commands[1]).showSpecialOffers();
-						} catch (UserNotFoundException e) {
-							e.printStackTrace();
-						}
+						} catch (UserNotFoundException e) {}
                     } else {System.out.println("The input doesn't correspond to what is expected");}
             	} else {System.out.println("You're not authorized to do that because you're not a customer or your fidelity card is not a basic card");}
                 break;
@@ -510,9 +496,7 @@ public class CommandLine {
                		myFoodoraSystem.setCurrentOrder(new ArrayList<Food>());
                		try {
 						myFoodoraSystem.setCurrentRestaurant(myFoodoraSystem.findRestaurantWithName(commands[1]));
-					} catch (UserNotFoundException e) {
-						e.printStackTrace();
-					}
+					} catch (UserNotFoundException e) {}
                	} else {System.out.println("You're not authorized to do that.");}
                	break;
               
@@ -521,9 +505,8 @@ public class CommandLine {
                 	Restaurant restaurant = myFoodoraSystem.getCurrentRestaurant();
                     try {
 						myFoodoraSystem.addItemToCurrentOrder(restaurant.findItemWithName(commands[1]));
-					} catch (FoodNotFoundException e) {
-						e.printStackTrace();
-					}
+						System.out.println(commands[1] + " has been added to your order.");
+					} catch (FoodNotFoundException e) {}
                 } else {System.out.println("The input doesn't correspond to what is expected");}
                 break;
                 
@@ -532,9 +515,8 @@ public class CommandLine {
                 	Restaurant restaurant = myFoodoraSystem.getCurrentRestaurant();
                     try {
 						myFoodoraSystem.addMealToCurrentOrder(restaurant.findMealWithName(commands[1]));
-					} catch (FoodNotFoundException e) {
-						e.printStackTrace();
-					}
+						System.out.println(commands[1] + " has been added to your order.");
+					} catch (FoodNotFoundException e) {}
                 } else {System.out.println("The input doesn't correspond to what is expected"); }
                 break;
                 
@@ -611,14 +593,14 @@ public class CommandLine {
             case "refuse":
             	if(myFoodoraSystem.getCurrentUser() instanceof Courier){
                		Courier courier = (Courier)myFoodoraSystem.getCurrentUser();
-               		courier.setState(0);
+               		courier.refuseDelivery();
                	} else {System.out.println("You're not authorized to do that.");}
                	break;
                	
             case "accept":
             	if(myFoodoraSystem.getCurrentUser() instanceof Courier){
                		Courier courier = (Courier)myFoodoraSystem.getCurrentUser();
-               		courier.setState(0);
+               		courier.acceptDelivery();
                	} else {System.out.println("You're not authorized to do that.");}
                	break;
                	
@@ -646,10 +628,10 @@ public class CommandLine {
                     System.out.println("registerCourier <firstName> <lastName> <position> <phone (without spaces)> <username> <password> : to add a new courier to the system.");
                     System.out.println("registerManager <firstName> <lastName> <username> <password> : to add a new manager to the system.");
                     System.out.println("showAllUsers : to show all users.");
-                    System.out.println("removeUser <username> : to remove a user with given username.");
-                    System.out.println("disactivateUser <username> : to disactivate a user with given username.");
-                    System.out.println("activateUser : to activate a user with given username.");
-                    System.out.println("associateCard <userName> <cardType : BasicFidelityCard OR LotteryFidelityCard OR PointFidelityCard> : to associate a fidelity card to a customer with given name.");
+                    System.out.println("removeUser <name> : to remove a user with given username.");
+                    System.out.println("disactivateUser <name> : to disactivate a user with given username.");
+                    System.out.println("activateUser <name> : to activate a user with given username.");
+                    System.out.println("associateCard <Name> <cardType> : BasicFidelityCard OR LotteryFidelityCard OR PointFidelityCard> : to associate a fidelity card to a customer with given name.");
                     
                     System.out.println("\n--- Business Managing Commands ---");
                     System.out.println("setDeliveryPolicy <fastestDelivery OR fairOccupationDelivery> : to set the delivery policy to the passed argument.");
@@ -663,12 +645,12 @@ public class CommandLine {
                     System.out.println("setServiceFee <service_fee> : to set the service fee to a given value.");
                     System.out.println("setMarkupPercentage <markupPercentage>: to set the markup percentage to a given value.");
                     System.out.println("setDeliveryCost <deliverycost>: to set the delivery cost to a given value.");
-                    System.out.println("showService_fee : to show the service fee.");
-                    System.out.println("showMarkup_Percentage : to show the markup percentage.");
-                    System.out.println("showDelivery_Cost : to show the delivery cost.");
+                    System.out.println("showServiceFee : to show the service fee.");
+                    System.out.println("showMarkupPercentage : to show the markup percentage.");
+                    System.out.println("showDeliveryCost : to show the delivery cost.");
                     System.out.println("showRestaurantTop : to show restaurants sorted in decreasing order w.r.t. the number of delivered orders.");
                     System.out.println("showCourierTop : to show couriers sorted in decreasing order w.r.t. the number of completed deliveries");
-                    System.out.println("showCustomers : to show all customers.");
+                    System.out.println("showAllCustomers : to show all customers.");
                     
                     System.out.println("\nruntest <testScenario-file> : executes the list of CLUI commands contained on the testScenario file.");
             	}
@@ -683,8 +665,8 @@ public class CommandLine {
                     System.out.println("showMyMenu <> : to show the content of your restaurant menu (items and meals).");
                     System.out.println("setSpecialOffer <mealName> : to add a meal to the Meal-of-the-week special offer.");
                     System.out.println("removeFromSpecialOffer <mealName> : to remove a meal from the meal-of-the-week special offer.");
-                    System.out.println("setGenericDiscountFactor <generic discount factor> : to set the discount factor on meal prices.");
-                    System.out.println("setSpecificDiscountFActor <specific discount factor> : to set the discount factor on meal of the week prices.");
+                    System.out.println("setGenericDiscountFactor <generic discount factor (between 0 and 1)> : to set the discount factor on meal prices.");
+                    System.out.println("setSpecificDiscountFActor <specific discount factor (between 0 and 1)> : to set the discount factor on meal of the week prices.");
             	}
             	if (user instanceof Customer){
             		System.out.println("List of available commands as Customer");
@@ -723,6 +705,7 @@ public class CommandLine {
     public void runtest(String fileName) {
 
         MyFoodoraSystem.startFromNothing();
+        myFoodoraSystem = MyFoodoraSystem.getInstance();
 
         File file = new File(fileName);
         BufferedReader reader = null;
@@ -743,8 +726,7 @@ public class CommandLine {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e1) {
-                }
+                } catch (IOException e1) {}
             }
         }
 
@@ -760,9 +742,9 @@ public class CommandLine {
 
         CommandLine commandLine = new CommandLine();
         //If we suppress the load step, we start with a new system
-        commandLine.load();
+        //commandLine.load();
         commandLine.run();
-        commandLine.save();
+        //commandLine.save();
     }
 
     /**

@@ -159,8 +159,18 @@ public class Order implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Order [orderedItems=" + orderedItems + ", orderedMeals=" + orderedMeals + ", restaurant=" + restaurant
-				+ ", orderdate=" + orderdate + "]";
+		String str = "Order [orderedItems=";
+		for (Item item : this.orderedItems){
+			str += item.getName();
+		}
+		str += ", orderedMeals=";
+		for (Meal meal : this.orderedMeals){
+			str += meal.getName();
+		}
+		str += ", restaurant=" + restaurant.getName();
+		str += ", orderprice=" + this.getOrderprice();
+		str += ", orderdate=" + (orderdate.get(Calendar.MONTH) + 1) + "/" + orderdate.get(Calendar.DAY_OF_MONTH) + "/" + orderdate.get(Calendar.YEAR) + "]";
+		return str;
 	}
 
 

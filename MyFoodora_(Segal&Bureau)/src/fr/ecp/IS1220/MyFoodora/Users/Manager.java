@@ -3,6 +3,7 @@ package fr.ecp.IS1220.MyFoodora.Users;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import fr.ecp.IS1220.MyFoodora.Exceptions.NameAlreadyUsedException;
 import fr.ecp.IS1220.MyFoodora.Policies.Delivery;
 import fr.ecp.IS1220.MyFoodora.Policies.TargetProfit;
 import fr.ecp.IS1220.MyFoodora.System.*;
@@ -21,26 +22,32 @@ public class Manager extends User{
 	 * Add any kind of user (restaurant, customers and/or couriers) to the system
 	 * @param user
 	 */
-	public void addUser(User u) {
-		if (u instanceof Manager){
-			ArrayList<Manager> newList = MyFoodoraSystem.getInstance().getRegisteredManagers();
-			newList.add((Manager) u);
-			MyFoodoraSystem.getInstance().setRegisteredManagers(newList);
+	public void addUser(User u) throws NameAlreadyUsedException {
+		if (MyFoodoraSystem.getInstance().getAllRegisteredUsers().contains(u)){
+			System.out.println("This username is already taken, please choose another one.");
+			throw new NameAlreadyUsedException();
 		}
-		if (u instanceof Restaurant){
-			ArrayList<Restaurant> newList = MyFoodoraSystem.getInstance().getRegisteredRestaurants();
-			newList.add((Restaurant) u);
-			MyFoodoraSystem.getInstance().setRegisteredRestaurants(newList);
-		}
-		if (u instanceof Customer){
-			ArrayList<Customer> newList = MyFoodoraSystem.getInstance().getRegisteredCustomers();
-			newList.add((Customer) u);
-			MyFoodoraSystem.getInstance().setRegisteredCustomers(newList);
-		}
-		if (u instanceof Courier){
-			ArrayList<Courier> newList = MyFoodoraSystem.getInstance().getRegisteredCouriers();
-			newList.add((Courier) u);
-			MyFoodoraSystem.getInstance().setRegisteredCouriers(newList);
+		else {
+			if (u instanceof Manager){
+				ArrayList<Manager> newList = MyFoodoraSystem.getInstance().getRegisteredManagers();
+				newList.add((Manager) u);
+				MyFoodoraSystem.getInstance().setRegisteredManagers(newList);
+			}
+			if (u instanceof Restaurant){
+				ArrayList<Restaurant> newList = MyFoodoraSystem.getInstance().getRegisteredRestaurants();
+				newList.add((Restaurant) u);
+				MyFoodoraSystem.getInstance().setRegisteredRestaurants(newList);
+			}
+			if (u instanceof Customer){
+				ArrayList<Customer> newList = MyFoodoraSystem.getInstance().getRegisteredCustomers();
+				newList.add((Customer) u);
+				MyFoodoraSystem.getInstance().setRegisteredCustomers(newList);
+			}
+			if (u instanceof Courier){
+				ArrayList<Courier> newList = MyFoodoraSystem.getInstance().getRegisteredCouriers();
+				newList.add((Courier) u);
+				MyFoodoraSystem.getInstance().setRegisteredCouriers(newList);
+			}
 		}
 	}
 	
@@ -54,20 +61,21 @@ public class Manager extends User{
 			ArrayList<Restaurant> newList = MyFoodoraSystem.getInstance().getRegisteredRestaurants();
 			newList.remove((Restaurant) u);
 			MyFoodoraSystem.getInstance().setRegisteredRestaurants(newList);
+			return;
 		}
 		if (u instanceof Customer){
 			ArrayList<Customer> newList = MyFoodoraSystem.getInstance().getRegisteredCustomers();
 			newList.remove((Customer) u);
 			MyFoodoraSystem.getInstance().setRegisteredCustomers(newList);
+			return;
 		}
 		if (u instanceof Courier){
 			ArrayList<Courier> newList = MyFoodoraSystem.getInstance().getRegisteredCouriers();
 			newList.remove((Courier) u);
 			MyFoodoraSystem.getInstance().setRegisteredCouriers(newList);
+			return;
 		}
-		else {
-			System.out.println("You can't remove this User");
-		}
+		System.out.println("You can't remove this User");
 	}
 	
 	
@@ -130,9 +138,9 @@ public class Manager extends User{
 		double res = 0;
 		MyFoodoraSystem system = MyFoodoraSystem.getInstance();
 		int i = system.getDeliveredOrders().size() - 1;
-		while (date.compareTo(system.getDeliveredOrders().get(i).getOrderdate()) <= 0){
-			i --;
+		while (i >= 0 && date.compareTo(system.getDeliveredOrders().get(i).getOrderdate()) <= 0){
 			res += system.getDeliveredOrders().get(i).getOrderprice();
+			i --;
 		}
 		return res;
 	}
@@ -157,11 +165,11 @@ public class Manager extends User{
 		double res = 0;
 		MyFoodoraSystem system = MyFoodoraSystem.getInstance();
 		int i = system.getDeliveredOrders().size() - 1;
-		while (date.compareTo(system.getDeliveredOrders().get(i).getOrderdate()) <= 0){
-			i --;
+		while (i >= 0 && date.compareTo(system.getDeliveredOrders().get(i).getOrderdate()) <= 0){
 			Order order = system.getDeliveredOrders().get(i);
 			res += (order.getOrderprice() - order.getServiceFee()) * order.getMarkupPercentage();
 			res += order.getServiceFee() - order.getDeliveryCost();
+			i --;
 		}
 		return res;
 	}
@@ -349,15 +357,21 @@ public class Manager extends User{
 		ArrayList<Restaurant> oldRestaurants = MyFoodoraSystem.getInstance().getRegisteredRestaurants();
 		ArrayList<Restaurant> newRestaurants = new ArrayList<Restaurant>();
 		for (Restaurant restaurant : oldRestaurants){
-			int i = newRestaurants.size();
-			Restaurant restaurantToCompare = newRestaurants.get(i);
-			while (restaurantToCompare.getShippedOrder().size() < restaurant.getShippedOrder().size() && i>0){
-				i--;
-			}
-			if (i<newRestaurants.size())
-				newRestaurants.add(i, restaurant);
-			else
+			if (newRestaurants.isEmpty()){
 				newRestaurants.add(restaurant);
+			} else {
+				int i = newRestaurants.size();
+				Restaurant restaurantToCompare = newRestaurants.get(i - 1);
+				while (restaurantToCompare.getShippedOrder().size() < restaurant.getShippedOrder().size() && i > 0){
+					i--;
+					if (i > 0)
+						restaurantToCompare = newRestaurants.get(i - 1);
+				}
+				if (i<newRestaurants.size())
+					newRestaurants.add(i, restaurant);
+				else
+					newRestaurants.add(restaurant);
+			}
 		}
 		MyFoodoraSystem.getInstance().setRegisteredRestaurants(newRestaurants);
 	}
@@ -401,15 +415,22 @@ public class Manager extends User{
 		ArrayList<Courier> oldCouriers = MyFoodoraSystem.getInstance().getRegisteredCouriers();
 		ArrayList<Courier> newCouriers = new ArrayList<Courier>();
 		for (Courier courier : oldCouriers){
-			int i = newCouriers.size();
-			Courier courierToCompare = newCouriers.get(i);
-			while (courierToCompare.getDeliveries().size() < courier.getDeliveries().size() && i>0){
-				i--;
-			}
-			if (i<newCouriers.size())
-				newCouriers.add(i, courier);
-			else
+			if (newCouriers.isEmpty()){
 				newCouriers.add(courier);
+			} else {
+				int i = newCouriers.size();
+				Courier courierToCompare = newCouriers.get(i - 1);
+				while (courierToCompare.getDeliveries().size() < courier.getDeliveries().size() && i>0){
+					i--;
+					if(i>0)
+						courierToCompare = newCouriers.get(i - 1);
+				}
+				if (i<newCouriers.size())
+					newCouriers.add(i, courier);
+				else
+					newCouriers.add(courier);
+			}
+			
 		}
 		MyFoodoraSystem.getInstance().setRegisteredCouriers(newCouriers);
 	}

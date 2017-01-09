@@ -43,18 +43,18 @@ public class MyFoodoraSystem implements Serializable{
 	private Customer winner = null;
 	
 	/**
-	 * Profit-related information
+	 * Profit-related information initialized with default values
 	 */
-	private double serviceFee;
-	private double markupPercentage;
-	private double deliveryCost;
+	private double serviceFee = 2;
+	private double markupPercentage = 0.05;
+	private double deliveryCost = 1;
 	
 	/**
-	 * Policies
+	 * Policies initialized with default policies
 	 */
-	private Delivery deliverypolicy;
-	private ShippedOrder shippolicy;
-	private TargetProfit targetprofit;
+	private Delivery deliverypolicy = Delivery.FastestDelivery;
+	private ShippedOrder shippedOrder = ShippedOrder.MostLeastOrderedItemALaCarte;
+	private TargetProfit targetprofit = TargetProfit.Markup;
 	
 	/**
 	 * Live informations
@@ -151,8 +151,8 @@ public class MyFoodoraSystem implements Serializable{
 	public ArrayList<Order> getDeliveredOrders() {
 		return deliveredOrders;
 	}
-	public void setDeliveredOrders(ArrayList<Order> deliveredOrders) {
-		this.deliveredOrders = deliveredOrders;
+	public void addDeliveredOrders(Order deliveredOrder) {
+		this.deliveredOrders.add(deliveredOrder);
 	}
 	public double getServiceFee() {
 		return serviceFee;
@@ -181,12 +181,12 @@ public class MyFoodoraSystem implements Serializable{
 		this.deliverypolicy = deliverypolicy;
 	}
 
-	public ShippedOrder getShippolicy() {
-		return shippolicy;
+	public ShippedOrder getShippedOrder() {
+		return shippedOrder;
 	}
 
-	public void setShippolicy(ShippedOrder shippolicy) {
-		this.shippolicy = shippolicy;
+	public void setShippedOrder(ShippedOrder shippedOrder) {
+		this.shippedOrder = shippedOrder;
 	}
 	
 	public TargetProfit getTargetprofit() {
@@ -297,7 +297,10 @@ public class MyFoodoraSystem implements Serializable{
 		if (deliverypolicy.equals(Delivery.FairOccupationDelivery)){
 			courier = this.getLaziestCourier(availableCouriers);
 		}
-		courier.setCurrentDelivery(order);
+		if (courier != null)
+			courier.setCurrentDelivery(order);
+		else
+			System.out.println("We couldn't find a courier for this order.");
 	}
 	
 	
@@ -399,7 +402,7 @@ public class MyFoodoraSystem implements Serializable{
 			System.out.println("Failure : wrong password.");
 		} else {
 			this.currentUser = user;
-			System.out.println("You're logged in!");
+			System.out.println("Congratulations " + this.currentUser.getName() + ", you're logged in!");
 		}
 	}
 
@@ -407,8 +410,12 @@ public class MyFoodoraSystem implements Serializable{
 	 * Permit the current user to log out of the system
 	 */
 	public void logout(){
-		this.currentUser = null;
-		System.out.println("You have been disconnected!");
+		if (this.currentUser != null){
+			this.currentUser = null;
+			System.out.println("You have been disconnected!");
+		} else {
+			System.out.println("Nobody is connected!");
+		}
 	}
 	
     /**

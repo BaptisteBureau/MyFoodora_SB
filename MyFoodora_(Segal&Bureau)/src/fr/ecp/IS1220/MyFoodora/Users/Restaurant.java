@@ -19,8 +19,8 @@ public class Restaurant extends User{
        private ArrayList<Meal> listOfMeals;
        private ArrayList<Meal> mealsInMenu;
        private ArrayList<Meal> mealsOfTheWeek;
-       private double generic_discount_factor;
-       private double specific_discount_factor;
+       private double generic_discount_factor = 0.05;
+       private double specific_discount_factor = 0.1;
        private ArrayList<Order> shippedOrder;
        private int counter = 0;
 
@@ -106,7 +106,11 @@ public class Restaurant extends User{
        }
  
        public void setGeneric_discount_factor(double generic_discount_factor) {
-             this.generic_discount_factor = generic_discount_factor;
+     		if (0 <= generic_discount_factor && generic_discount_factor <= 1)
+    			this.generic_discount_factor = generic_discount_factor;
+    		else
+    			System.out.println(" Your generic discount factor has not been changed !");
+    			System.out.println("Please try again, with a number between 0 and 1.");
        }
  
        public double getSpecific_discount_factor() {
@@ -114,7 +118,11 @@ public class Restaurant extends User{
        }
  
        public void setSpecific_discount_factor(double specific_discount_factor) {
-             this.specific_discount_factor = specific_discount_factor;
+      		if (0 <= specific_discount_factor && specific_discount_factor <= 1)
+     			this.specific_discount_factor = specific_discount_factor;
+     		else
+     			System.out.println(" Your specific discount factor has not been changed !");
+     			System.out.println("Please try again, with a number between 0 and 1.");
        }
        
        
@@ -184,8 +192,9 @@ public class Restaurant extends User{
        /**
         * Permit to create item
         */
-       public void createItem(){
-    	   Scanner sc = new Scanner(System.in);
+       @SuppressWarnings("resource")
+	public void createItem(){
+		Scanner sc = new Scanner(System.in);
     	   ItemType type = null;
     	   double price = 0.0;
     	   String answer = "";
@@ -239,7 +248,7 @@ public class Restaurant extends User{
     	   //In this case, the method ends.
     	   
     	   if(type != null){
-	    	   sc.nextLine(); //Empties the scanner
+    		   sc.nextLine(); //Empties the scanner
 	    	   
 	    	   //Choose a name for the item. It shouldn't be already attributed to an other existing item.
 	    	   
@@ -280,11 +289,10 @@ public class Restaurant extends User{
 		    	   while(price <= 0.0){
 			    	   System.out.println("At what price should this item be sold ?");
 		    		   try{
-		    			   price = sc.nextDouble();
-			    	   } catch(InputMismatchException e){
+		    			   price = Double.parseDouble(sc.nextLine());
+			    	   } catch(NumberFormatException e){
 			    		   System.out.println("You're supposed to enter a positive double number for the price.");
 			    		   System.out.println("Do you like to try again ? Yes / No");
-		    			   sc.nextLine(); //Empties the scanner
 		    			   answer = sc.nextLine();
 		    			   if(!answer.toLowerCase().equals("yes"))
 		        			   break;
@@ -293,7 +301,6 @@ public class Restaurant extends User{
 			    	   if(price <= 0.0){
 			    		   System.out.println("You're supposed to enter a positive double number for the price.");
 			    		   System.out.println("Do you like to try again ? Yes / No");
-		    			   sc.nextLine(); //Empties the scanner
 		    			   answer = sc.nextLine();
 		    			   if(!answer.toLowerCase().equals("yes"))
 		        			   break;
@@ -306,7 +313,6 @@ public class Restaurant extends User{
 		    	   if(price > 0.0){
 
 			    	   System.out.println("Is this item vegetarian ? Yes / No");
-			    	   sc.nextLine(); //Empties the scanner
 			    	   answer = sc.nextLine();
 			    	   if(answer.toLowerCase().equals("yes")){
 			    		   regimeType = RegimeType.Vegetarian;
@@ -326,7 +332,7 @@ public class Restaurant extends User{
 			    	   
 			    	   //We check if the user wants to add this item to his menu, with description of the item created.
 			    	   
-			    	   System.out.println("Do you want to add this item to the menu ? \n" + item.toString());
+			    	   System.out.println("Do you want to add this item to the menu ? Yes / No\n" + item.toString());
 			    	   answer = sc.nextLine();
 			    	   if(answer.toLowerCase().equals("yes")){
 			    		   this.menu.add(item); 
@@ -339,7 +345,6 @@ public class Restaurant extends User{
 	    	   }
 	    	   
     	   }
-    	   sc.close();
        }
        
        
@@ -419,7 +424,7 @@ public class Restaurant extends User{
     		   
 	    	   System.out.println("Does this meal contain a starter ? Yes / No");
 	    	   answer = sc.nextLine();
-	    	   if(!answer.toLowerCase().equals("yes")){ //Check if the answer is similar to yes (avoids misunderstanding)
+	    	   if(answer.toLowerCase().equals("yes")){ //Check if the answer is similar to yes (avoids misunderstanding)
 	    		   
 	    		   //Now, the user has to choose his starter from his starters list.
 	    		   //We create this startersName Array List to link names of items with items themselves.
@@ -494,7 +499,7 @@ public class Restaurant extends User{
 			   
 			   System.out.println("Does this meal contain a dessert ? Yes / No");
 	    	   answer = sc.nextLine();
-	    	   if(answer.toLowerCase().charAt(0) != 'y'){
+	    	   if(answer.toLowerCase().equals("yes")){
 	    		   ArrayList<String> dessertsName = new ArrayList<String>();
 	    		   System.out.println("Choose between your list of desserts :");
 	    		   for(Item i : listOfItems){
@@ -554,9 +559,9 @@ public class Restaurant extends User{
 	    	   
 	    	 //We check if the user wants to add this meal to his menu, with description of the meal created.
 	    	   
-	    	   System.out.println("Do you want to add this meal to the menu ? \n" + meal.toString());
+	    	   System.out.println("Do you want to add this meal to the menu ? Yes / No\n" + meal.toString());
 	    	   answer = sc.nextLine();
-	    	   if(answer.toLowerCase().charAt(0) != 'y'){
+	    	   if(answer.toLowerCase().equals("yes")){
 	    		   this.mealsInMenu.add(meal); 
 	    		   System.out.println("This meal has been added to your menu.");
 	    	   }
@@ -564,7 +569,6 @@ public class Restaurant extends User{
 	    		   System.out.println("This meal has been created but hasn't been added to your menu");
 	    	   }
     	   }
-    	   sc.close();
        }
        
        
@@ -700,7 +704,7 @@ public class Restaurant extends User{
         * Sorting of shipped orders
         */
        public void sortShippedOrder(){
-    	   ShippedOrder policy = MyFoodoraSystem.getInstance().getShippolicy();
+    	   ShippedOrder policy = MyFoodoraSystem.getInstance().getShippedOrder();
     	   if(policy == ShippedOrder.MostLeastOrderedHalfMeal){
     		   System.out.println(this.getSortedShippedHalfMeals());
     	   }
