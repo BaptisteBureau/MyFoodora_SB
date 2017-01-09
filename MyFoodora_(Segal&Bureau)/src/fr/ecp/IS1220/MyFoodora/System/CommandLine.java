@@ -27,7 +27,7 @@ public class CommandLine {
     private Scanner scanner = new Scanner(System.in);
     
     /**
-     * This method permit to save data of our system
+     * This method allows to save data of our system
      */
     public void save() {
         try {
@@ -41,7 +41,7 @@ public class CommandLine {
     }
     
     /**
-     * This method permit to load saved data of our system
+     * This method allows to load saved data of our system
      */
     public void load() {
     	try {
@@ -60,7 +60,7 @@ public class CommandLine {
     }
 
     /**
-     * This loop permits read all command until the you want to quit
+     * This loop allows to read all command until you want to quit
      */
     public void run() {
         String command = null;
